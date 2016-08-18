@@ -1,0 +1,17 @@
+diff -uprN --no-dereference a/commands.mk b/commands.mk
+--- a/commands.mk	2016-01-25 20:56:38.692751317 +0900
++++ b/commands.mk	2016-01-25 20:58:35.701602365 +0900
+@@ -2,10 +2,10 @@
+ CC=cc
+ RM=rm -f
+ INSTALL=install
+-INSTALL_PROGRAM=$(INSTALL) -s -m 555
++INSTALL_PROGRAM=$(INSTALL) -s
+ INSTALL_DIR=$(INSTALL) -d
+-INSTALL_LIB=$(INSTALL) -s -m 444
+-INSTALL_DATA=$(INSTALL) -m 444
++INSTALL_LIB=$(INSTALL) -s
++INSTALL_DATA=$(INSTALL)
+ INSTALL_SCRIPT=$(INSTALL_PROGRAM)
+ XGETTEXT=xgettext
+ MSGFMT=msgfmt
