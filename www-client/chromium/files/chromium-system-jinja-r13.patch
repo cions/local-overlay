@@ -57,23 +57,3 @@
             code_generator_template_files
  
    # Dummy file to track dependency.
---- a/third_party/WebKit/Source/platform/v8_inspector/v8_inspector.gyp.orig	2016-06-03 12:31:49.844954196 +0000
-+++ b/third_party/WebKit/Source/platform/v8_inspector/v8_inspector.gyp	2016-06-03 12:32:01.869198425 +0000
-@@ -60,7 +60,6 @@
-         {
-           'action_name': 'generateV8InspectorProtocolBackendSources',
-           'inputs': [
--            '<@(jinja_module_files)',
-             # The python script in action below.
-             '../inspector_protocol/CodeGenerator.py',
-             # Input files for the script.
---- a/third_party/WebKit/Source/core/inspector/inspector.gyp.orig	2016-06-03 12:38:20.712891692 +0000
-+++ b/third_party/WebKit/Source/core/inspector/inspector.gyp	2016-06-03 12:38:31.197104557 +0000
-@@ -52,7 +52,6 @@
-         {
-           'action_name': 'generateInspectorProtocolBackendSources',
-           'inputs': [
--            '<@(jinja_module_files)',
-             # The python script in action below.
-             '../../platform/inspector_protocol/CodeGenerator.py',
-             # Input files for the script.
