@@ -35,5 +35,6 @@ src_prepare() {
 	eapply_user
 
 	mv */*.${FONT_SUFFIX} "${FONT_S}" || die
-	mv */*-README.txt "${FONT_S}" || die
+	mv migmix-1m-${PV}/migmix-README.txt "${FONT_S}" || die
+	mv migu-1c-${PV}/migu-README.txt "${FONT_S}" || die
 }
