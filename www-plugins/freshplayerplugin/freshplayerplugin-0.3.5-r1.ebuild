@@ -24,15 +24,21 @@ HWDEC_DEPEND="
 	x11-libs/libvdpau"
 CDEPEND="
 	dev-libs/glib:2=
+	dev-libs/icu:0=
 	dev-libs/libevent:=[threads]
 	media-libs/alsa-lib:=
 	media-libs/freetype:2=
 	media-libs/mesa:=[egl,gles2?]
+	x11-libs/cairo:=[X]
+	x11-libs/libXcursor:=
 	x11-libs/libXrandr:=
 	x11-libs/libXrender:=
 	x11-libs/libdrm:=
 	x11-libs/pango:=[X]
-	jack? ( media-sound/jack-audio-connection-kit )
+	jack? (
+		media-sound/jack-audio-connection-kit
+		media-libs/soxr
+	)
 	pulseaudio? ( media-sound/pulseaudio )
 	gtk3? ( x11-libs/gtk+:3= )
 	!gtk3? ( x11-libs/gtk+:2= )
@@ -44,6 +50,7 @@ CDEPEND="
 
 RDEPEND="${CDEPEND}
 	|| (
+		www-plugins/adobe-flash
 		www-plugins/chrome-binary-plugins[flash]
 		www-client/google-chrome
 		www-client/google-chrome-beta
