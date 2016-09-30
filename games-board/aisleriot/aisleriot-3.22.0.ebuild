@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI="5"
+EAPI=5
 
 inherit autotools eutils gnome-games
 
@@ -12,11 +12,10 @@ HOMEPAGE="https://wiki.gnome.org/action/show/Apps/Aisleriot"
 LICENSE="GPL-3 LGPL-3 FDL-1.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
+RESTRICT="mirror"
 IUSE="gnome qt4"
 
-# FIXME: quartz support?
-# Does not build with guile-2.0.0 or 2.0.1
-COMMON_DEPEND="
+RDEPEND="
 	>=dev-libs/glib-2.32:2
 	>=dev-scheme/guile-2.0.5[deprecated,regex]
 	>=gnome-base/librsvg-2.32:2
@@ -24,9 +23,8 @@ COMMON_DEPEND="
 	>=x11-libs/cairo-1.10
 	>=x11-libs/gtk+-3.4:3
 	gnome? ( >=gnome-base/gconf-2.0:2 )
-	qt4? ( >=dev-qt/qtsvg-4.4:4 )
-"
-DEPEND="${COMMON_DEPEND}
+	qt4? ( >=dev-qt/qtsvg-4.4:4 )"
+DEPEND="${RDEPEND}
 	app-arch/gzip
 	dev-libs/libxml2
 	>=dev-util/intltool-0.40.4
@@ -35,13 +33,9 @@ DEPEND="${COMMON_DEPEND}
 	>=app-text/yelp-tools-3.1.1
 	>=sys-devel/gettext-0.12
 	virtual/pkgconfig
-	gnome? ( app-text/docbook-xml-dtd:4.3 )
-"
+	gnome? ( app-text/docbook-xml-dtd:4.3 )"
 
 src_prepare() {
-	# Fix SVG detection and usage
-	# epatch "${FILESDIR}"/${PN}-3.16.2-detect-svg.patch
-
 	eautoreconf
 	gnome2_src_prepare
 }
