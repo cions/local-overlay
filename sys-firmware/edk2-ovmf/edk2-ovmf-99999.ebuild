@@ -11,7 +11,7 @@ DESCRIPTION="EDK II Open Source UEFI Firmware"
 HOMEPAGE="http://www.tianocore.org/"
 EGIT_REPO_URI="https://github.com/tianocore/edk2.git"
 
-OPENSSL_PV="1.0.2h"
+OPENSSL_PV="1.0.2j"
 OPENSSL_P="openssl-${OPENSSL_PV}"
 SRC_URI="mirror://openssl/source/${OPENSSL_P}.tar.gz"
 
