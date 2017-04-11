@@ -29,12 +29,12 @@ S="${WORKDIR}"
 
 FONT_SUFFIX="ttf"
 FONT_S="${S}"
-DOCS=( "migmix-README.txt" "migu-README.txt" )
+DOCS="migmix-README.txt migu-README.txt"
 
-src_prepare() {
-	eapply_user
+src_unpack() {
+	unpack ${A}
+	cd "${S}"
 
-	mv */*.${FONT_SUFFIX} "${FONT_S}" || die
-	mv migmix-1m-${PV}/migmix-README.txt "${FONT_S}" || die
-	mv migu-1c-${PV}/migu-README.txt "${FONT_S}" || die
+	mv */*.ttf . || die
+	cp -n */*.txt . || die
 }
