@@ -23,4 +23,4 @@ S="${WORKDIR}/${MY_P}"
 
 FONT_SUFFIX="ttf"
 FONT_S="${S}"
-DOCS=( "Readme_${MY_P}.txt" )
+DOCS="Readme_${MY_P}.txt"
