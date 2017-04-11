@@ -13,24 +13,24 @@ LICENSE="GPL-3 LGPL-3 FDL-1.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 RESTRICT="mirror"
-IUSE="gnome qt4"
+IUSE="gnome qt4 sound"
 
 RDEPEND="
 	>=dev-libs/glib-2.32:2
 	>=dev-scheme/guile-2.0.5[deprecated,regex]
 	>=gnome-base/librsvg-2.32:2
-	>=media-libs/libcanberra-0.26[gtk3]
 	>=x11-libs/cairo-1.10
 	>=x11-libs/gtk+-3.4:3
 	gnome? ( >=gnome-base/gconf-2.0:2 )
-	qt4? ( >=dev-qt/qtsvg-4.4:4 )"
+	qt4? ( >=dev-qt/qtsvg-4.4:4 )
+	sound? ( >=media-libs/libcanberra-0.26[gtk3] )"
 DEPEND="${RDEPEND}
 	app-arch/gzip
+	>=app-text/yelp-tools-3.1.1
 	dev-libs/libxml2
 	>=dev-util/intltool-0.40.4
 	dev-util/itstool
 	sys-apps/lsb-release
-	>=app-text/yelp-tools-3.1.1
 	>=sys-devel/gettext-0.12
 	virtual/pkgconfig
 	gnome? ( app-text/docbook-xml-dtd:4.3 )"
@@ -41,7 +41,11 @@ src_prepare() {
 }
 
 src_configure() {
-	local myconf=()
+	local myconf=(
+		--with-gtk=3.0
+		--with-guile=2.0
+		--with-pysol-card-theme-path="${EPREFIX}${GAMES_DATADIR}"/pysolfc
+	)
 
 	if use gnome; then
 		myconf+=(
@@ -55,7 +59,7 @@ src_configure() {
 		)
 	fi
 
-	if use qt4 ; then
+	if use qt4; then
 		myconf+=(
 			--with-card-theme-formats=all
 			--with-kde-card-theme-path="${EPREFIX}"/usr/share/apps/carddecks
@@ -64,13 +68,11 @@ src_configure() {
 		myconf+=( --with-card-theme-formats=svg,fixed,pysol )
 	fi
 
-	gnome2_src_configure \
-		--with-gtk=3.0 \
-		--with-guile=2.0 \
-		--enable-sound \
-		--with-pysol-card-theme-path="${EPREFIX}${GAMES_DATADIR}"/pysolfc \
-		GUILE="$(type -P guile-2.0)" \
-		"${myconf[@]}"
+	if use sound; then
+		myconf+=( --enable-sound )
+	fi
+
+	gnome2_src_configure "${myconf[@]}"
 }
 
 pkg_postinst() {
