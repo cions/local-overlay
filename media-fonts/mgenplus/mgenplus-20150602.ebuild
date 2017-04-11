@@ -21,4 +21,4 @@ S="${WORKDIR}"
 
 FONT_SUFFIX="ttf"
 FONT_S="${S}"
-DOCS=( "README_MgenPlus.txt" )
+DOCS="README_MgenPlus.txt"
