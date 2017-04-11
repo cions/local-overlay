@@ -11,9 +11,9 @@ DESCRIPTION="EDK II Open Source UEFI Firmware"
 HOMEPAGE="http://www.tianocore.org/"
 EGIT_REPO_URI="https://github.com/tianocore/edk2.git"
 
-OPENSSL_PV="1.0.2k"
+OPENSSL_PV="1.1.0e"
 OPENSSL_P="openssl-${OPENSSL_PV}"
-SRC_URI="mirror://openssl/source/${OPENSSL_P}.tar.gz"
+SRC_URI="secure-boot? ( mirror://openssl/source/${OPENSSL_P}.tar.gz )"
 
 LICENSE="BSD-2"
 SLOT="0"
@@ -32,11 +32,8 @@ src_prepare() {
 
 	if use secure-boot; then
 		local openssllib="${S}/CryptoPkg/Library/OpensslLib"
-		mv "${WORKDIR}/${OPENSSL_P}" "${openssllib}" || die
-		pushd "${openssllib}/${OPENSSL_P}" >/dev/null
-		patch -p1 "${openssllib}/EDKII_${OPENSSL_P}.patch" || die
-		popd >/dev/null
-		./Install.sh || die
+		mkdir "${openssllib}"/openssl || die
+		mv "${WORKDIR}/${OPENSSL_P}" "${openssllib}"/openssl || die
 	fi
 }
 
