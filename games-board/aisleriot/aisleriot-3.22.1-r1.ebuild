@@ -70,6 +70,8 @@ src_configure() {
 
 	if use sound; then
 		myconf+=( --enable-sound )
+	else
+		myconf+=( --disable-sound )
 	fi
 
 	gnome2_src_configure "${myconf[@]}"
