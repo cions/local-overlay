@@ -1,0 +1,23 @@
+diff --git a/SConstruct b/SConstruct
+index 607dd5f..cb3cc5a 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -9,14 +9,16 @@ prefix = ARGUMENTS.get('prefix', '/usr/local')
+ lib = ARGUMENTS.get('libsuffix', 'lib')
+ libdir = os.path.join(DESTDIR + prefix, lib)
+ 
+-env = Environment(CPPPATH='#/src', LIBS=['m', 'stdc++'],
+-    CXXFLAGS=ARGUMENTS.get('CXXFLAGS', ''))
++env = Environment(CPPPATH='#/src', LIBS=['m'])
+ debug = ARGUMENTS.get('debug', 0)
+ optimize = ARGUMENTS.get('optimize', 0)
+ env.Replace(CXX = ARGUMENTS.get('CXX', 'g++'))
+ 
+ # for shared lib, requires scons 2.3.0
+ env['SHLIBVERSION'] = '1.0.0'
++env['CXX'] = os.environ['CXX']
++env['CXXFLAGS'] = os.environ['CXXFLAGS']
++env['ENV']['PATH'] = os.environ['PATH']
+ 
+ CCFLAGS = []
+ if int(debug):
