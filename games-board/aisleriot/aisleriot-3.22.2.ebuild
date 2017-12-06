@@ -43,7 +43,7 @@ src_prepare() {
 src_configure() {
 	local myconf=(
 		--with-gtk=3.0
-		--with-guile=2.0
+		--with-guile=auto
 		--with-pysol-card-theme-path="${EPREFIX}${GAMES_DATADIR}"/pysolfc
 	)
 
