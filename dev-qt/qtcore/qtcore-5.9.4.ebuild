@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -34,6 +34,13 @@ QT5_TARGET_SUBDIRS=(
 	doc
 )
 
+QT5_GENTOO_PRIVATE_CONFIG=(
+	!:network
+	!:sql
+	!:testlib
+	!:xml
+)
+
 src_configure() {
 	local myconf=(
 		$(qt_use icu)
@@ -42,9 +49,7 @@ src_configure() {
 	)
 
 	if tc-is-clang; then
-		myconf+=(
-			--platform=linux-clang
-		)
+		myconf+=( --platform=linux-clang )
 	fi
 
 	qt5-build_src_configure

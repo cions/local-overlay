@@ -24,6 +24,8 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 
+PATCHES=( "${FILESDIR}/${P}-avx.patch" )
+
 QT5_TARGET_SUBDIRS=(
 	src/tools/bootstrap
 	src/tools/moc
@@ -42,9 +44,7 @@ src_configure() {
 	)
 
 	if tc-is-clang; then
-		myconf+=(
-			--platform=linux-clang
-		)
+		myconf+=( --platform=linux-clang )
 	fi
 
 	qt5-build_src_configure
