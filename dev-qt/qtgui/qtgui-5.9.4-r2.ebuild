@@ -1,9 +1,9 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 QT5_MODULE="qtbase"
-inherit qt5-build
+inherit qt5-build toolchain-funcs
 
 DESCRIPTION="The GUI module and platform plugins for the Qt5 framework"
 
@@ -54,7 +54,7 @@ RDEPEND="
 		x11-libs/libICE
 		x11-libs/libSM
 		x11-libs/libX11
-		>=x11-libs/libXi-1.7.4
+		>=x11-libs/libXi-1.7.5
 		>=x11-libs/libxcb-1.10:=[xkb]
 		>=x11-libs/libxkbcommon-0.4.1[X]
 		x11-libs/xcb-util-image
@@ -70,6 +70,11 @@ DEPEND="${RDEPEND}
 PDEPEND="
 	ibus? ( app-i18n/ibus )
 "
+
+PATCHES=(
+	"${FILESDIR}/${P}-qsimpledrag.patch" # QTBUG-66103
+	"${FILESDIR}/${P}-libinput-pixeldelta.patch" # QTBUG-59261
+)
 
 QT5_TARGET_SUBDIRS=(
 	src/gui
@@ -119,6 +124,10 @@ QT5_GENTOO_CONFIG=(
 	xcb::XKB
 )
 
+QT5_GENTOO_PRIVATE_CONFIG=(
+	:gui
+)
+
 src_prepare() {
 	# egl_x11 is activated when both egl and xcb are enabled
 	use egl && QT5_GENTOO_CONFIG+=(xcb:egl_x11) || QT5_GENTOO_CONFIG+=(egl:egl_x11)
@@ -148,6 +157,7 @@ src_configure() {
 		-fontconfig
 		-system-freetype
 		$(usex gif '' -no-gif)
+		-gui
 		-system-harfbuzz
 		$(qt_use jpeg libjpeg system)
 		$(qt_use libinput)
@@ -160,5 +170,10 @@ src_configure() {
 		$(qt_use xcb xkbcommon-x11 system)
 		$(usex xcb '-xcb-xlib -xinput2 -xkb' '')
 	)
+
+	if tc-is-clang; then
+		myconf+=( --platform=linux-clang )
+	fi
+
 	qt5-build_src_configure
 }
