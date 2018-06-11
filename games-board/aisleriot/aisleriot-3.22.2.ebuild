@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 
-inherit autotools eutils gnome-games
+inherit autotools eutils gnome2
 
 DESCRIPTION="A collection of solitaire card games for GNOME"
 HOMEPAGE="https://wiki.gnome.org/action/show/Apps/Aisleriot"
