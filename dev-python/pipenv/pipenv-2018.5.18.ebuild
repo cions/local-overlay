@@ -17,7 +17,7 @@ KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
 IUSE="test"
 
 RDEPEND="
-	>=dev-python/flake8-3.0.0[${PYTHON_USEDEP}]
+	>=dev-python/pip-9.0.1[${PYTHON_USEDEP}]
 	dev-python/certifi[${PYTHON_USEDEP}]
 	>=dev-python/setuptools-36.2.1[${PYTHON_USEDEP}]
 	dev-python/virtualenv[${PYTHON_USEDEP}]
