@@ -3,7 +3,7 @@
 
 EAPI=6
 QT5_MODULE="qtbase"
-inherit qt5-build toolchain-funcs
+inherit qt5-build
 
 DESCRIPTION="Cross-platform application development framework"
 
@@ -49,11 +49,6 @@ src_configure() {
 		$(qt_use !icu iconv)
 		$(qt_use systemd journald)
 	)
-
-	if tc-is-clang; then
-		myconf+=( --platform=linux-clang )
-	fi
-
 	qt5-build_src_configure
 }
 
