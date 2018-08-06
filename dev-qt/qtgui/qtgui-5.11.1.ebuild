@@ -29,7 +29,7 @@ RDEPEND="
 	~dev-qt/qtcore-${PV}
 	media-libs/fontconfig
 	>=media-libs/freetype-2.6.1:2
-	>=media-libs/harfbuzz-1.0.6:=
+	>=media-libs/harfbuzz-1.6.0:=
 	>=sys-libs/zlib-1.2.5
 	virtual/opengl
 	dbus? ( ~dev-qt/qtdbus-${PV} )
@@ -72,6 +72,7 @@ PDEPEND="
 "
 
 QT5_TARGET_SUBDIRS=(
+	src/tools/qvkgen
 	src/gui
 	src/openglextensions
 	src/platformheaders
@@ -130,7 +131,7 @@ src_prepare() {
 	qt_use_disable_config dbus dbus \
 		src/platformsupport/themes/genericunix/genericunix.pri
 
-	qt_use_disable_config tuio udpsocket src/plugins/generic/generic.pro
+	qt_use_disable_config tuio tuiotouch src/plugins/generic/generic.pro
 
 	qt_use_disable_mod ibus dbus \
 		src/plugins/platforminputcontexts/platforminputcontexts.pro

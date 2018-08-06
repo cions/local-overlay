@@ -3,12 +3,12 @@
 
 EAPI=6
 QT5_MODULE="qtbase"
-inherit qt5-build toolchain-funcs
+inherit qt5-build
 
 DESCRIPTION="The GUI module and platform plugins for the Qt5 framework"
 
 if [[ ${QT5_BUILD_TYPE} == release ]]; then
-	KEYWORDS="~amd64 ~arm ~arm64 ~hppa ~ppc ~ppc64 ~x86 ~amd64-fbsd"
+	KEYWORDS="amd64 ~arm ~arm64 ~hppa ~ppc ~ppc64 x86 ~amd64-fbsd"
 fi
 
 # TODO: linuxfb
@@ -165,10 +165,5 @@ src_configure() {
 		$(qt_use xcb xkbcommon-x11 system)
 		$(usex xcb '-xcb-xlib -xinput2 -xkb' '')
 	)
-
-	if tc-is-clang; then
-		myconf+=( --platform=linux-clang )
-	fi
-
 	qt5-build_src_configure
 }
