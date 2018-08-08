@@ -31,6 +31,12 @@ DEPEND="${RDEPEND}
 # requires networking
 RESTRICT="test"
 
+src_prepare() {
+	sed -i '/setup_requires=/d' setup.py
+
+	eapply_user
+}
+
 python_test() {
 	py.test -v -v || die
 }
