@@ -8,7 +8,7 @@ inherit qt5-build
 DESCRIPTION="Cross-platform application development framework"
 
 if [[ ${QT5_BUILD_TYPE} == release ]]; then
-	KEYWORDS="amd64 ~arm ~arm64 ~hppa ppc ppc64 x86 ~amd64-fbsd"
+	KEYWORDS="~amd64 ~arm ~arm64 ~hppa ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd"
 fi
 
 IUSE="icu systemd"
@@ -59,7 +59,7 @@ src_install() {
 		ALSA CUPS DBUS EGL EGLFS EGL_X11 EVDEV FONTCONFIG FREETYPE
 		HARFBUZZ IMAGEFORMAT_JPEG IMAGEFORMAT_PNG LIBPROXY MITSHM
 		OPENGL OPENSSL OPENVG PULSEAUDIO SHAPE SSL TSLIB WIDGETS
-		XCURSOR	XFIXES XKB XRANDR XRENDER XSYNC ZLIB
+		XCURSOR	XFIXES XKB XRANDR XSYNC ZLIB
 	)
 
 	for flag in ${flags[@]}; do
