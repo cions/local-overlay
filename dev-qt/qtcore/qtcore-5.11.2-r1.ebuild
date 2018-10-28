@@ -8,7 +8,7 @@ inherit qt5-build toolchain-funcs
 DESCRIPTION="Cross-platform application development framework"
 
 if [[ ${QT5_BUILD_TYPE} == release ]]; then
-	KEYWORDS="amd64 ~arm ~arm64 ~hppa ~ppc ~ppc64 ~sparc x86 ~amd64-fbsd"
+	KEYWORDS="~amd64 ~arm ~arm64 ~hppa ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd"
 fi
 
 IUSE="icu systemd"
@@ -41,6 +41,10 @@ QT5_GENTOO_PRIVATE_CONFIG=(
 	!:sql
 	!:testlib
 	!:xml
+)
+
+PATCHES=(
+	"${FILESDIR}/${P}-export-qt_open64.patch" # bug 669010
 )
 
 src_configure() {
