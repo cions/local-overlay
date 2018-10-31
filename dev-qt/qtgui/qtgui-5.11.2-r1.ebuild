@@ -1,14 +1,14 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 QT5_MODULE="qtbase"
-inherit qt5-build
+inherit qt5-build toolchain-funcs
 
 DESCRIPTION="The GUI module and platform plugins for the Qt5 framework"
 
 if [[ ${QT5_BUILD_TYPE} == release ]]; then
-	KEYWORDS="amd64 ~arm ~arm64 ~hppa ppc ppc64 x86 ~amd64-fbsd"
+	KEYWORDS="~amd64 ~arm ~arm64 ~hppa ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd"
 fi
 
 # TODO: linuxfb
@@ -29,7 +29,7 @@ RDEPEND="
 	~dev-qt/qtcore-${PV}
 	media-libs/fontconfig
 	>=media-libs/freetype-2.6.1:2
-	>=media-libs/harfbuzz-1.0.6:=
+	>=media-libs/harfbuzz-1.6.0:=
 	>=sys-libs/zlib-1.2.5
 	virtual/opengl
 	dbus? ( ~dev-qt/qtdbus-${PV} )
@@ -71,13 +71,10 @@ PDEPEND="
 	ibus? ( app-i18n/ibus )
 "
 
-PATCHES=(
-	"${FILESDIR}/${P}-qsimpledrag.patch" # QTBUG-66103
-	"${FILESDIR}/${P}-libinput-pixeldelta.patch" # QTBUG-59261
-	"${FILESDIR}/${P}-opengl.patch" # QTBUG-66420
-)
+PATCHES=( "${FILESDIR}"/${P}-qapplication-block.patch ) # bug 668994
 
 QT5_TARGET_SUBDIRS=(
+	src/tools/qvkgen
 	src/gui
 	src/openglextensions
 	src/platformheaders
@@ -136,7 +133,7 @@ src_prepare() {
 	qt_use_disable_config dbus dbus \
 		src/platformsupport/themes/genericunix/genericunix.pri
 
-	qt_use_disable_config tuio udpsocket src/plugins/generic/generic.pro
+	qt_use_disable_config tuio tuiotouch src/plugins/generic/generic.pro
 
 	qt_use_disable_mod ibus dbus \
 		src/plugins/platforminputcontexts/platforminputcontexts.pro
@@ -171,5 +168,10 @@ src_configure() {
 		$(qt_use xcb xkbcommon-x11 system)
 		$(usex xcb '-xcb-xlib -xinput2 -xkb' '')
 	)
+
+	if tc-is-clang; then
+		myconf+=( --platform=linux-clang )
+	fi
+
 	qt5-build_src_configure
 }
