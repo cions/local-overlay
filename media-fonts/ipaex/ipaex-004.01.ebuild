@@ -8,8 +8,8 @@ inherit font
 MY_P="IPAexfont${PV/.}"
 
 DESCRIPTION="IPAex Japanese TrueType fonts"
-HOMEPAGE="http://ipafont.ipa.go.jp/"
-SRC_URI="http://dl.ipafont.ipa.go.jp/IPAexfont/${MY_P}.zip"
+HOMEPAGE="https://ipafont.ipa.go.jp/"
+SRC_URI="https://oscdl.ipa.go.jp/IPAexfont/${MY_P}.zip"
 
 LICENSE="IPAfont"
 SLOT="0"
