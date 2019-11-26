@@ -57,6 +57,7 @@ src_unpack() {
 src_prepare() {
 	sed -i "/^REVISION :=/s/.*/REVISION := $REVISION/" mk/common.mk
 
+	eapply "${FILESDIR}/fix-ldconfig-real.patch"
 	eapply "${FILESDIR}/fix-tirpc.patch"
 	eapply "${FILESDIR}/fix-uidgid.patch"
 	eapply_user

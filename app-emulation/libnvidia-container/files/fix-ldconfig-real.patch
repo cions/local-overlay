@@ -1,0 +1,19 @@
+--- a/src/nvc_container.c
++++ b/src/nvc_container.c
+@@ -313,15 +313,7 @@
+         if (cudart_dir == NULL)
+                 cudart_dir = CUDA_RUNTIME_DIR;
+         if (ldconfig == NULL) {
+-                /*
+-                 * Some distributions have a wrapper script around ldconfig to reduce package install time.
+-                 * Always refer to the real one to prevent having our privileges dropped by a shebang.
+-                 */
+-                if (path_resolve_full(err, path, rootfs, LDCONFIG_ALT_PATH) < 0)
+-                        goto fail;
+-                if ((ret = file_exists(err, path)) < 0)
+-                        goto fail;
+-                ldconfig = ret ? LDCONFIG_ALT_PATH : LDCONFIG_PATH;
++                ldconfig = LDCONFIG_PATH;
+         }
+ 
+         if ((cnt->cfg.bins_dir = xstrdup(err, bins_dir)) == NULL)
