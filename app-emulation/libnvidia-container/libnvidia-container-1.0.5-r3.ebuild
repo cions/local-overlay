@@ -57,7 +57,6 @@ src_unpack() {
 src_prepare() {
 	sed -i "/^REVISION :=/s/.*/REVISION := $REVISION/" mk/common.mk
 
-	eapply "${FILESDIR}/fix-ldconfig-real.patch"
 	eapply "${FILESDIR}/fix-tirpc.patch"
 	eapply "${FILESDIR}/fix-uidgid.patch"
 	eapply_user
@@ -75,4 +74,16 @@ src_install() {
 	dolib.so libnvidia-container.so.*
 
 	dodoc COPYING* LICENSE NOTICE
+}
+
+pkg_postinst() {
+	if [ ! -e "${EPREFIX}"/sbin/ldconfig.real ]; then
+		ln -sf ldconfig "${EPREFIX}"/sbin/ldconfig
+	fi
+}
+
+pkg_postrm() {
+	if [ -L "${EPREFIX}"/sbin/ldconfig.real ]; then
+		rm "${EPREFIX}"/sbin/ldconfig.real
+	fi
 }
