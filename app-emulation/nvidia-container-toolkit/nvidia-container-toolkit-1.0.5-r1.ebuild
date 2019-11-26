@@ -17,8 +17,8 @@ RESTRICT="mirror strip"
 IUSE=""
 
 RDEPEND="
-	>=app-emulation/libnvidia-container-tools-0.1.0
-	<app-emulation/libnvidia-container-tools-2.0.0"
+	>=app-emulation/libnvidia-container-0.1.0
+	<app-emulation/libnvidia-container-2.0.0"
 DEPEND=""
 
 S="${WORKDIR}"
@@ -35,4 +35,16 @@ src_install() {
 
 	gunzip usr/share/doc/${PN}/*.gz
 	dodoc usr/share/doc/${PN}/*
+}
+
+pkg_postinst() {
+	if [ ! -e "${EPREFIX}"/usr/bin/nvidia-container-runtime-hook ]; then
+		ln -sf "${EPREFIX}"/usr/bin/nvidia-container-toolkit "${EPREFIX}"/usr/bin/nvidia-container-runtime-hook
+	fi
+}
+
+pkg_postrm() {
+	if [ -L "${EPREFIX}"/usr/bin/nvidia-container-runtime-hook ]; then
+		rm "${EPREFIX}"/usr/bin/nvidia-container-runtime-hook
+	fi
 }
