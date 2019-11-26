@@ -78,7 +78,7 @@ src_install() {
 
 pkg_postinst() {
 	if [ ! -e "${EPREFIX}"/sbin/ldconfig.real ]; then
-		ln -sf ldconfig "${EPREFIX}"/sbin/ldconfig
+		ln -sf ldconfig "${EPREFIX}"/sbin/ldconfig.real
 	fi
 }
 
