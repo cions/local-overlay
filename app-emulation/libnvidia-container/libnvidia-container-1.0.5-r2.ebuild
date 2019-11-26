@@ -4,6 +4,8 @@
 
 EAPI=7
 
+inherit toolchain-funcs
+
 REVISION="b6aff41f09bb2c21ed7da3058c61a063726fa5d6"
 
 NVIDIA_MODPROBE_VERSION="396.51"
@@ -61,6 +63,7 @@ src_prepare() {
 }
 
 src_compile() {
+	tc-ld-disable-gold
 	emake WITH_TIRPC=yes all
 }
 
