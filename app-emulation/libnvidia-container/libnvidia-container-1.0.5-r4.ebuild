@@ -64,26 +64,15 @@ src_prepare() {
 
 src_compile() {
 	tc-ld-disable-gold
-	emake WITH_TIRPC=yes all
+	emake WITH_LIBELF=yes WITH_TIRPC=yes all
 }
 
 src_install() {
 	dobin nvidia-container-cli
+	dosym ldconfig /sbin/ldconfig.real
 
 	ln -sf libnvidia-container.so."${PV}" libnvidia-container.so.1
 	dolib.so libnvidia-container.so.*
 
 	dodoc COPYING* LICENSE NOTICE
-}
-
-pkg_postinst() {
-	if [ ! -e "${EPREFIX}"/sbin/ldconfig.real ]; then
-		ln -sf ldconfig "${EPREFIX}"/sbin/ldconfig.real
-	fi
-}
-
-pkg_postrm() {
-	if [ -L "${EPREFIX}"/sbin/ldconfig.real ]; then
-		rm "${EPREFIX}"/sbin/ldconfig.real
-	fi
 }
