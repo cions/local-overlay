@@ -29,22 +29,11 @@ src_unpack() {
 
 src_install() {
 	dobin usr/bin/nvidia-container-toolkit
+	dosym nvidia-container-toolkit /usr/bin/nvidia-container-runtime-hook
 
 	insinto /etc/nvidia-container-runtime
-	doins  etc/nvidia-container-runtime/config.toml
+	doins etc/nvidia-container-runtime/config.toml
 
 	gunzip usr/share/doc/${PN}/*.gz
 	dodoc usr/share/doc/${PN}/*
-}
-
-pkg_postinst() {
-	if [ ! -e "${EPREFIX}"/usr/bin/nvidia-container-runtime-hook ]; then
-		ln -sf "${EPREFIX}"/usr/bin/nvidia-container-toolkit "${EPREFIX}"/usr/bin/nvidia-container-runtime-hook
-	fi
-}
-
-pkg_postrm() {
-	if [ -L "${EPREFIX}"/usr/bin/nvidia-container-runtime-hook ]; then
-		rm "${EPREFIX}"/usr/bin/nvidia-container-runtime-hook
-	fi
 }
