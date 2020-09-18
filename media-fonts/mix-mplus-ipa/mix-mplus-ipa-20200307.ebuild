@@ -2,20 +2,20 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=6
+EAPI=7
 inherit font
 
 DESCRIPTION="MigMix and Migu Japanese TrueType fonts"
 HOMEPAGE="http://mix-mplus-ipa.osdn.jp/"
 SRC_URI="
-	mirror://osdn/mix-mplus-ipa/63544/migmix-1m-${PV}.zip
-	mirror://osdn/mix-mplus-ipa/63544/migmix-1p-${PV}.zip
-	mirror://osdn/mix-mplus-ipa/63544/migmix-2m-${PV}.zip
-	mirror://osdn/mix-mplus-ipa/63544/migmix-2p-${PV}.zip
-	mirror://osdn/mix-mplus-ipa/63545/migu-1c-${PV}.zip
-	mirror://osdn/mix-mplus-ipa/63545/migu-1m-${PV}.zip
-	mirror://osdn/mix-mplus-ipa/63545/migu-1p-${PV}.zip
-	mirror://osdn/mix-mplus-ipa/63545/migu-2m-${PV}.zip"
+	mirror://osdn/mix-mplus-ipa/72510/migmix-1m-${PV}.zip
+	mirror://osdn/mix-mplus-ipa/72510/migmix-1p-${PV}.zip
+	mirror://osdn/mix-mplus-ipa/72510/migmix-2m-${PV}.zip
+	mirror://osdn/mix-mplus-ipa/72510/migmix-2p-${PV}.zip
+	mirror://osdn/mix-mplus-ipa/72511/migu-1c-${PV}.zip
+	mirror://osdn/mix-mplus-ipa/72511/migu-1m-${PV}.zip
+	mirror://osdn/mix-mplus-ipa/72511/migu-1p-${PV}.zip
+	mirror://osdn/mix-mplus-ipa/72511/migu-2m-${PV}.zip"
 
 LICENSE="IPAfont"
 SLOT="0"
