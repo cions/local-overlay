@@ -2,14 +2,14 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=6
+EAPI=7
 inherit font
 
 MY_P="IPAexfont${PV/.}"
 
 DESCRIPTION="IPAex Japanese TrueType fonts"
-HOMEPAGE="https://ipafont.ipa.go.jp/"
-SRC_URI="https://oscdl.ipa.go.jp/IPAexfont/${MY_P}.zip"
+HOMEPAGE="https://moji.or.jp/ipafont/"
+SRC_URI="https://moji.or.jp/wp-content/ipafont/IPAexfont/${MY_P}.zip"
 
 LICENSE="IPAfont"
 SLOT="0"
