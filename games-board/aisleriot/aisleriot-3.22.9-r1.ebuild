@@ -7,13 +7,13 @@ EAPI=6
 inherit autotools eutils gnome2
 
 DESCRIPTION="A collection of solitaire card games for GNOME"
-HOMEPAGE="https://wiki.gnome.org/action/show/Apps/Aisleriot"
+HOMEPAGE="https://wiki.gnome.org/Apps/Aisleriot"
 
-LICENSE="GPL-3 LGPL-3 FDL-1.1"
+LICENSE="GPL-3+ LGPL-3+ FDL-1.1+ FDL-1.3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 RESTRICT="mirror"
-IUSE="gnome qt4 sound"
+IUSE="gnome qt5 sound"
 
 RDEPEND="
 	>=dev-libs/glib-2.32:2
@@ -22,7 +22,7 @@ RDEPEND="
 	>=x11-libs/cairo-1.10
 	>=x11-libs/gtk+-3.4:3
 	gnome? ( >=gnome-base/gconf-2.0:2 )
-	qt4? ( >=dev-qt/qtsvg-4.4:4 )
+	qt5? ( >=dev-qt/qtsvg-5.0:5 )
 	sound? ( >=media-libs/libcanberra-0.26[gtk3] )"
 DEPEND="${RDEPEND}
 	app-arch/gzip
@@ -44,7 +44,7 @@ src_configure() {
 	local myconf=(
 		--with-gtk=3.0
 		--with-guile=auto
-		--with-pysol-card-theme-path="${EPREFIX}${GAMES_DATADIR}"/pysolfc
+		--with-pysol-card-theme-path="${EPREFIX}"/usr/share/pysolfc
 	)
 
 	if use gnome; then
@@ -59,7 +59,7 @@ src_configure() {
 		)
 	fi
 
-	if use qt4; then
+	if use qt5; then
 		myconf+=(
 			--with-card-theme-formats=all
 			--with-kde-card-theme-path="${EPREFIX}"/usr/share/apps/carddecks
