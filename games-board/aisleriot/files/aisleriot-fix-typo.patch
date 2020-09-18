@@ -1,0 +1,12 @@
+--- a/meson.build
++++ b/meson.build
+@@ -135,7 +135,7 @@
+ if get_option('default_theme_format') == 'svg-rsvg'
+   default_theme_format='svg'
+ elif get_option('default_theme_format') == 'svg-qtsvg'
+-  default_teme_format='native'
++  default_theme_format='native'
+ else
+   default_theme_format = get_option('default_theme_format')
+ endif
+
