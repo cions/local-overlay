@@ -1,0 +1,6 @@
+# Copyright 1999-2020 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+# cions <gh.cions@gmail.com> (2020-09-19)
+# Masked for versioning scheme changes
+>=media-fonts/inconsolata-20140821
