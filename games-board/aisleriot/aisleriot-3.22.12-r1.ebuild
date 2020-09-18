@@ -61,75 +61,22 @@ src_configure() {
 }
 
 pkg_preinst() {
-	local f
-
-	XDG_ECLASS_DESKTOPFILES=()
-	while IFS= read -r -d '' f; do
-		XDG_ECLASS_DESKTOPFILES+=( ${f} )
-	done < <(cd "${ED}" && find 'usr/share/applications' -type f -print0 2>/dev/null)
-
-	XDG_ECLASS_ICONFILES=()
-	while IFS= read -r -d '' f; do
-		XDG_ECLASS_ICONFILES+=( ${f} )
-	done < <(cd "${ED}" && find 'usr/share/icons' -type f -print0 2>/dev/null)
-
-	XDG_ECLASS_MIMEINFOFILES=()
-	while IFS= read -r -d '' f; do
-		XDG_ECLASS_MIMEINFOFILES+=( ${f} )
-	done < <(cd "${ED}" && find 'usr/share/mime' -type f -print0 2>/dev/null)
-
-	gnome2_gconf_savelist
-	gnome2_schemas_savelist
+	use gnome && gnome2_gconf_savelist
 }
 
 pkg_postinst() {
-	if [[ ${#XDG_ECLASS_DESKTOPFILES[@]} -gt 0 ]]; then
-		xdg_desktop_database_update
-	else
-		debug-print "No .desktop files to add to database"
-	fi
-
-	if [[ ${#XDG_ECLASS_ICONFILES[@]} -gt 0 ]]; then
-		xdg_icon_cache_update
-	else
-		debug-print "No icon files to add to cache"
-	fi
-
-	if [[ ${#XDG_ECLASS_MIMEINFOFILES[@]} -gt 0 ]]; then
-		xdg_mimeinfo_database_update
-	else
-		debug-print "No mime info files to add to database"
-	fi
-
-	gnome2_gconf_install
-	if [[ -n ${GNOME2_ECLASS_GLIB_SCHEMAS} ]]; then
-		gnome2_schemas_update
-	fi
+	xdg_desktop_database_update
+	xdg_icon_cache_update
+	gnome2_schemas_update
+	use gnome && gnome2_gconf_install
 
 	elog "Aisleriot can use additional card themes from games-board/pysolfc"
 	elog "and kde-base/libkdegames."
 }
 
 pkg_postrm() {
-	if [[ ${#XDG_ECLASS_DESKTOPFILES[@]} -gt 0 ]]; then
-		xdg_desktop_database_update
-	else
-		debug-print "No .desktop files to add to database"
-	fi
-
-	if [[ ${#XDG_ECLASS_ICONFILES[@]} -gt 0 ]]; then
-		xdg_icon_cache_update
-	else
-		debug-print "No icon files to add to cache"
-	fi
-
-	if [[ ${#XDG_ECLASS_MIMEINFOFILES[@]} -gt 0 ]]; then
-		xdg_mimeinfo_database_update
-	else
-		debug-print "No mime info files to add to database"
-	fi
-
-	if [[ -n ${GNOME2_ECLASS_GLIB_SCHEMAS} ]]; then
-		gnome2_schemas_update
-	fi
+	xdg_desktop_database_update
+	xdg_icon_cache_update
+	gnome2_schemas_update
+	use gnome && gnome2_gconf_uninstall
 }
