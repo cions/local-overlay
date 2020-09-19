@@ -8,7 +8,7 @@ DESCRIPTION="Patched font Inconsolata from the nerd-fonts library"
 HOMEPAGE="https://www.nerdfonts.com/"
 SRC_URI="https://github.com/ryanoasis/nerd-fonts/releases/download/v${PV}/Inconsolata.zip -> ${P}.zip"
 
-LICENSE="Apache-2.0"
+LICENSE="OFL-1.1"
 SLOT="0"
 KEYWORDS="amd64 ~arm64 ~ppc x86 ~ppc-macos ~x64-macos ~x86-macos"
 IUSE=""
