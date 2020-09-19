@@ -14,13 +14,14 @@ LICENSE="OFL-1.1"
 SLOT="0"
 KEYWORDS="~alpha amd64 arm arm64 ~mips ppc ppc64 sparc x86"
 IUSE=""
+RESTRICT="binchecks mirror strip test"
 
-RESTRICT="binchecks strip"
-
+RDEPEND=""
+DEPEND=""
 S="${WORKDIR}/${PN}-${COMMIT}"
 
-FONT_S="${S}"
 FONT_SUFFIX="otf"
+FONT_S="${S}"
 FONT_CONF=(
 	# From ArchLinux
 	"${FILESDIR}/70-noto-cjk.conf"
