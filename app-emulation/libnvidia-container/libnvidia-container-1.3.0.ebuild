@@ -6,15 +6,11 @@ EAPI=7
 
 inherit toolchain-funcs
 
-REVISION="b6aff41f09bb2c21ed7da3058c61a063726fa5d6"
+REVISION="16315ebdf4b9728e899f615e208b50c41d7a5d15"
 
-NVIDIA_MODPROBE_VERSION="396.51"
+NVIDIA_MODPROBE_VERSION="450.57"
 NVIDIA_MODPROBE="nvidia-modprobe-${NVIDIA_MODPROBE_VERSION}"
 NVIDIA_MODPROBE_URL="https://github.com/NVIDIA/nvidia-modprobe/archive/${NVIDIA_MODPROBE_VERSION}.tar.gz"
-
-ELFTOOLCHAIN_VERSION="0.7.1"
-ELFTOOLCHAIN="elftoolchain-${ELFTOOLCHAIN_VERSION}"
-ELFTOOLCHAIN_URL="https://sourceforge.net/projects/elftoolchain/files/Sources/${ELFTOOLCHAIN}/${ELFTOOLCHAIN}.tar.bz2"
 
 LIBTIRPC_VERSION="1.1.4"
 LIBTIRPC="libtirpc-${LIBTIRPC_VERSION}"
@@ -25,18 +21,18 @@ HOMEPAGE="https://github.com/NVIDIA/libnvidia-container"
 SRC_URI="
 	https://github.com/NVIDIA/libnvidia-container/archive/v${PV}.tar.gz -> ${P}.tar.gz
 	${NVIDIA_MODPROBE_URL} -> ${NVIDIA_MODPROBE}.tar.gz
-	${ELFTOOLCHAIN_URL}
 	${LIBTIRPC_URL}"
 
-LICENSE="BSD LGPL-3+"
+LICENSE="Apache-2.0 BSD LGPL-3+ MIT"
 SLOT="0"
 KEYWORDS="~amd64"
-RESTRICT="strip"
+RESTRICT="mirror strip"
 IUSE=""
 
 RDEPEND="
 	>=sys-libs/libcap-2.10
-	sys-libs/libseccomp"
+	sys-libs/libseccomp
+	virtual/libelf"
 DEPEND="sys-devel/bmake"
 
 src_unpack() {
@@ -46,20 +42,20 @@ src_unpack() {
 
 	mkdir -p "${DEPS_SRC}"
 	mv "${NVIDIA_MODPROBE}" "${DEPS_SRC}"
-	mv "${ELFTOOLCHAIN}" "${DEPS_SRC}"
 	mv "${LIBTIRPC}" "${DEPS_SRC}"
 
 	touch "${DEPS_SRC}/${NVIDIA_MODPROBE}/.download_stamp"
-	touch "${DEPS_SRC}/${ELFTOOLCHAIN}/.download_stamp"
 	touch "${DEPS_SRC}/${LIBTIRPC}/.download_stamp"
 }
 
 src_prepare() {
 	sed -i "/^REVISION :=/s/.*/REVISION := $REVISION/" mk/common.mk
 
-	eapply "${FILESDIR}/fix-tirpc.patch"
-	eapply "${FILESDIR}/fix-uidgid.patch"
-	eapply_user
+	eapply "${FILESDIR}"/${P}-fix-tirpc.patch
+	eapply "${FILESDIR}"/${P}-nvidia-modprobe.patch
+	eapply "${FILESDIR}"/${P}-fix-uidgid.patch
+
+	default
 }
 
 src_compile() {
@@ -71,8 +67,9 @@ src_install() {
 	dobin nvidia-container-cli
 	dosym ldconfig /sbin/ldconfig.real
 
-	ln -sf libnvidia-container.so."${PV}" libnvidia-container.so.1
-	dolib.so libnvidia-container.so.*
+	ln -sf libnvidia-container.so."${PV}" libnvidia-container.so."$(ver_cut 1)"
+	ln -sf libnvidia-container.so."$(ver_cut 1)" libnvidia-container.so
+	dolib.so libnvidia-container.so*
 
 	dodoc COPYING* LICENSE NOTICE
 }
