@@ -44,8 +44,8 @@ failure_derive-0.1.6
 flate2-1.0.12
 fnv-1.0.6
 fuchsia-cprng-0.1.1
-git-delta-0.4.3
-git2-0.13.10
+git-delta-0.4.4
+git2-0.13.11
 heck-0.3.1
 hermit-abi-0.1.12
 idna-0.2.0
@@ -56,7 +56,7 @@ jobserver-0.1.21
 lazy_static-1.4.0
 lazycell-1.2.1
 libc-0.2.60
-libgit2-sys-0.12.12+1.0.1
+libgit2-sys-0.12.13+1.0.1
 libz-sys-1.1.0
 line-wrap-0.1.1
 linked-hash-map-0.5.2
@@ -96,8 +96,8 @@ serde_json-1.0.40
 shell-words-1.0.0
 smallvec-1.4.0
 strsim-0.8.0
-structopt-0.3.17
-structopt-derive-0.4.10
+structopt-0.3.19
+structopt-derive-0.4.12
 syn-0.15.43
 syn-1.0.11
 syn-mid-0.5.0
