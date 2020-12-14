@@ -5,10 +5,9 @@ EAPI=7
 inherit font
 
 DESCRIPTION="Google's CJK font family"
-HOMEPAGE="https://www.google.com/get/noto/ https://github.com/googlei18n/noto-cjk"
+HOMEPAGE="https://www.google.com/get/noto/ https://github.com/googlefonts/noto-cjk"
 
-COMMIT="be6c059ac1587e556e2412b27f5155c8eb3ddbe6"
-SRC_URI="https://github.com/googlei18n/noto-cjk/archive/${COMMIT}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/googlefonts/noto-cjk/archive/v${PV}-cjk.tar.gz -> ${P}.tar.gz"
 
 LICENSE="OFL-1.1"
 SLOT="0"
@@ -18,7 +17,7 @@ RESTRICT="binchecks mirror strip test"
 
 RDEPEND=""
 DEPEND=""
-S="${WORKDIR}/${PN}-${COMMIT}"
+S="${WORKDIR}/${P}-cjk"
 
 FONT_SUFFIX="otf"
 FONT_S="${S}"
