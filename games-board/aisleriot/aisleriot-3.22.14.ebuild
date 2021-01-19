@@ -38,7 +38,6 @@ DEPEND="${RDEPEND}
 src_prepare() {
 	gnome2_environment_reset
 
-	eapply "${FILESDIR}"/${PN}-fix-shebang.patch
 	eapply "${FILESDIR}"/${PN}-fix-typo.patch
 
 	default
