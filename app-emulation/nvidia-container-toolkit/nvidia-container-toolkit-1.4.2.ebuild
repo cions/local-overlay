@@ -6,8 +6,8 @@ EAPI=7
 
 inherit unpacker
 
-DESCRIPTION="NVIDIA container runtime hook"
-HOMEPAGE="https://github.com/NVIDIA/nvidia-container-runtime"
+DESCRIPTION="Provides a OCI hook to enable GPU support in containers"
+HOMEPAGE="https://github.com/NVIDIA/nvidia-container-toolkit"
 SRC_URI="https://nvidia.github.io/nvidia-container-runtime/ubuntu20.04/amd64/${PN}_${PV}-1_amd64.deb"
 
 LICENSE="BSD"
@@ -17,7 +17,7 @@ RESTRICT="mirror strip"
 IUSE=""
 
 RDEPEND="
-	>=app-emulation/libnvidia-container-1.3.1
+	>=app-emulation/libnvidia-container-1.3.3
 	<app-emulation/libnvidia-container-2.0.0"
 DEPEND=""
 
