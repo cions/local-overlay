@@ -17,7 +17,7 @@ RESTRICT="mirror strip"
 IUSE=""
 
 RDEPEND="
-	>=app-emulation/libnvidia-container-1.3.3
+	>=app-emulation/libnvidia-container-1.4.0
 	<app-emulation/libnvidia-container-2.0.0"
 DEPEND=""
 
