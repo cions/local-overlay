@@ -6,9 +6,9 @@ EAPI=7
 
 inherit toolchain-funcs
 
-REVISION="4afad130c4c253abd3b2db563ffe9331594bda41"
+REVISION="dd2c49d6699e4d8529fbeaa58ee91554977b652e"
 
-NVIDIA_MODPROBE_VERSION="450.57"
+NVIDIA_MODPROBE_VERSION="495.44"
 NVIDIA_MODPROBE="nvidia-modprobe-${NVIDIA_MODPROBE_VERSION}"
 NVIDIA_MODPROBE_URL="https://github.com/NVIDIA/nvidia-modprobe/archive/${NVIDIA_MODPROBE_VERSION}.tar.gz"
 
@@ -51,8 +51,8 @@ src_unpack() {
 
 src_prepare() {
 	eapply "${FILESDIR}"/${P}-fix-tirpc.patch
-	eapply "${FILESDIR}"/${P}-nvidia-modprobe.patch
 	eapply "${FILESDIR}"/${P}-fix-uidgid.patch
+	eapply "${FILESDIR}"/${P}-nvidia-modprobe.patch
 
 	default
 }

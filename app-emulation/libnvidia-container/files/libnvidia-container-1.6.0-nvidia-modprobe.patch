@@ -1,6 +1,6 @@
---- a/deps/src/nvidia-modprobe-450.57/modprobe-utils/nvidia-modprobe-utils.c
-+++ b/deps/src/nvidia-modprobe-450.57/modprobe-utils/nvidia-modprobe-utils.c
-@@ -840,10 +840,10 @@
+--- a/deps/src/nvidia-modprobe-495.44/modprobe-utils/nvidia-modprobe-utils.c
++++ b/deps/src/nvidia-modprobe-495.44/modprobe-utils/nvidia-modprobe-utils.c
+@@ -880,10 +880,10 @@
      return mknod_helper(major, minor_num, vgpu_dev_name, NV_PROC_REGISTRY_PATH);
  }
  
@@ -15,8 +15,8 @@
  {
      char field[32];
      FILE *fp;
---- a/deps/src/nvidia-modprobe-450.57/modprobe-utils/nvidia-modprobe-utils.h
-+++ b/deps/src/nvidia-modprobe-450.57/modprobe-utils/nvidia-modprobe-utils.h
+--- a/deps/src/nvidia-modprobe-495.44/modprobe-utils/nvidia-modprobe-utils.h
++++ b/deps/src/nvidia-modprobe-495.44/modprobe-utils/nvidia-modprobe-utils.h
 @@ -81,6 +81,7 @@
  int nvidia_nvswitch_get_file_state(int minor);
  int nvidia_cap_mknod(const char* cap_file_path, int *minor);
