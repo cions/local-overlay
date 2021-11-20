@@ -8,7 +8,7 @@ inherit unpacker
 
 DESCRIPTION="Provides a OCI hook to enable GPU support in containers"
 HOMEPAGE="https://github.com/NVIDIA/nvidia-container-toolkit"
-SRC_URI="https://nvidia.github.io/nvidia-container-runtime/ubuntu20.04/amd64/${PN}_${PV}-1_amd64.deb"
+SRC_URI="https://nvidia.github.io/libnvidia-container/ubuntu20.04/amd64/${PN}_${PV}-1_amd64.deb"
 
 LICENSE="BSD"
 SLOT="0"
