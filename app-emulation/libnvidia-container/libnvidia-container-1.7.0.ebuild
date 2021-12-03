@@ -30,6 +30,13 @@ RESTRICT="mirror strip"
 IUSE=""
 DOCS="COPYING COPYING.LESSER LICENSE NOTICE README.md"
 
+PATCHES=(
+	"${FILESDIR}"/${P}-fix-static-assert.patch
+	"${FILESDIR}"/${P}-fix-tirpc.patch
+	"${FILESDIR}"/${P}-fix-uidgid.patch
+	"${FILESDIR}"/${P}-nvidia-modprobe.patch
+)
+
 RDEPEND="
 	>=sys-libs/libcap-2.10
 	sys-libs/libseccomp
@@ -47,14 +54,6 @@ src_unpack() {
 
 	mv "${LIBTIRPC}" "${DEPS_SRC}"
 	touch "${DEPS_SRC}/${LIBTIRPC}/.download_stamp"
-}
-
-src_prepare() {
-	eapply "${FILESDIR}"/${P}-fix-tirpc.patch
-	eapply "${FILESDIR}"/${P}-fix-uidgid.patch
-	eapply "${FILESDIR}"/${P}-nvidia-modprobe.patch
-
-	default
 }
 
 src_compile() {

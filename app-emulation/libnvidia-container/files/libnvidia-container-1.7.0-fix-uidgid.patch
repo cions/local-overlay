@@ -1,6 +1,6 @@
 --- a/src/cli/configure.c
 +++ b/src/cli/configure.c
-@@ -220,8 +220,8 @@
+@@ -243,8 +243,8 @@
                  goto fail;
          }
          nvc->no_pivot = ctx->no_pivot;
@@ -10,4 +10,4 @@
 +        nvc_cfg->gid = (ctx->gid == (gid_t)-1) ? getegid() : ctx->gid;
          nvc_cfg->root = ctx->root;
          nvc_cfg->ldcache = ctx->ldcache;
-         if (nvc_init(nvc, nvc_cfg, ctx->init_flags) < 0) {
+         if (libnvc.init(nvc, nvc_cfg, ctx->init_flags) < 0) {
