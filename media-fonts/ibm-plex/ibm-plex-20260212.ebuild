@@ -1,4 +1,4 @@
-# Copyright 2019-2024 Gentoo Authors
+# Copyright 2019-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -7,7 +7,7 @@ inherit font
 
 DESCRIPTION="The package of IBM's typeface"
 HOMEPAGE="https://github.com/IBM/plex"
-COMMIT="ceee82fa88781b8310b198fd302480efaeac609e"
+COMMIT="770f2077bb8cb12a3a20bcefc8be9dd2ed985908"
 SRC_URI="https://github.com/IBM/plex/archive/${COMMIT}.zip -> ${P}.zip"
 
 LICENSE="OFL-1.1"
