@@ -14,7 +14,7 @@ LICENSE="GPL-3+ LGPL-3+ FDL-1.1+ FDL-1.3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 RESTRICT="mirror"
-IUSE="gnome qt5 sound"
+IUSE="gnome sound"
 
 RDEPEND="
 	>=dev-libs/glib-2.32:2
@@ -23,7 +23,6 @@ RDEPEND="
 	>=x11-libs/cairo-1.10
 	>=x11-libs/gtk+-3.18:3
 	gnome? ( >=gnome-base/gconf-2.0:2 )
-	qt5? ( >=dev-qt/qtsvg-5.0:5 )
 	sound? ( >=media-libs/libcanberra-0.26[gtk3] )"
 DEPEND="${RDEPEND}
 	app-arch/gzip
@@ -45,15 +44,13 @@ src_prepare() {
 
 src_configure() {
 	local emesonargs=(
-		-Ddefault_theme_format=$(usex qt5 svg-qtsvg svg-rsvg)
+		-Ddefault_theme_format=svg-rsvg
 		-Ddocs=true
 		-Dhelp_method=$(usex gnome ghelp library)
-		-Dtheme_kde=true
-		-Dtheme_kde_path="${EPREFIX}"/usr/share/apps/carddecks
+		-Dtheme_kde=false
 		-Dtheme_pysol=true
 		-Dtheme_pysol_path="${EPREFIX}"/usr/share/pysolfc
 		$(meson_use gnome gconf)
-		$(meson_use qt5 theme_svg_qtsvg)
 		$(meson_use sound)
 	)
 	meson_src_configure
