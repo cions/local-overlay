@@ -64,7 +64,6 @@ RDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-23.3-static_assert-failure.patch"
 	"${FILESDIR}/${PN}-30.0-findJsonCpp.patch"
 )
 
