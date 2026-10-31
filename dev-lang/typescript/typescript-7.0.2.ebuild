@@ -20,6 +20,10 @@ RESTRICT="mirror test"
 RDEPEND="!dev-lang/typescript-bin"
 BDEPEND=">=dev-lang/go-1.26"
 
+PATCHES=(
+	"${FILESDIR}"/typescript-7.0.2-typescript-native-preview.patch
+)
+
 src_unpack() {
 	unpack "${FILESDIR}/typescript-${PV}-vendor.tar.xz"
 	go-module_src_unpack
