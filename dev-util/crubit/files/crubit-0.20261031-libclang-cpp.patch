@@ -1,0 +1,14 @@
+diff --git a/cargo/build/clang.rs b/cargo/build/clang.rs
+index 8dd7f8157..a8c7dceb1 100644
+--- a/cargo/build/clang.rs
++++ b/cargo/build/clang.rs
+@@ -54,6 +54,9 @@ pub fn collect_clang_libs() -> (Vec<PathBuf>, Vec<OsString>) {
+     // llvm depends on zlib.
+     libs.push(OsString::from(ZLIB_NAME));
+ 
++    // libclang-cpp.so
++    libs.push(OsString::from("clang-cpp"));
++
+     libs.sort_unstable();
+ 
+     (clang_lib_dirs, libs)

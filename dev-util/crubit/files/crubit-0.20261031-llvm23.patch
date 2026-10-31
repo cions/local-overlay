@@ -1,0 +1,73 @@
+diff --git a/rs_bindings_from_cc/ast_util.cc b/rs_bindings_from_cc/ast_util.cc
+index 4bd59d0f7..7ae1ec552 100644
+--- a/rs_bindings_from_cc/ast_util.cc
++++ b/rs_bindings_from_cc/ast_util.cc
+@@ -580,14 +580,7 @@ RecordingDiagnosticConsumer RecordDiagnosticsAndMarkFailedInstantiations(
+ 
+ bool ForceDefineImplicitFunction(ImportContext& ictx,
+                                  clang::FunctionDecl* function_decl) {
+-  if (auto defaulted_kind =
+-#if LLVM_DEV_DATE_GE(20260818)
+-          // The new API has been introduced in
+-          // https://github.com/llvm/llvm-project/commit/ab547095ead5464dc024d66264d9b8a987f429f3
+-      function_decl->getDefaultedFunctionKind();
+-#else
+-          ictx.sema_.getDefaultedFunctionKind(function_decl);
+-#endif
++  if (auto defaulted_kind = ictx.sema_.getDefaultedFunctionKind(function_decl);
+       defaulted_kind.isSpecialMember()) {
+     auto special_member_kind = defaulted_kind.asSpecialMember();
+     if (!function_decl->isDeleted() &&
+diff --git a/rs_bindings_from_cc/importer.cc b/rs_bindings_from_cc/importer.cc
+index c2fe7af1a..f1fd9cc39 100644
+--- a/rs_bindings_from_cc/importer.cc
++++ b/rs_bindings_from_cc/importer.cc
+@@ -1573,9 +1573,7 @@ Importer::GetModuleCommentsInFile(clang::FileID file) const {
+     const clang::CommentOptions& comment_options =
+         ctx_.getLangOpts().CommentOpts;
+     std::optional<llvm::MemoryBufferRef> buffer = sm.getBufferOrNone(file);
+-    if (buffer.has_value() &&
+-        (comment_options.RetainCommentsFromSystemHeaders ||
+-         !IsInSystemHeader(sm.getLocForStartOfFile(file)))) {
++    if (buffer.has_value() && !IsInSystemHeader(sm.getLocForStartOfFile(file))) {
+       clang::Lexer lexer(file, *buffer, sm, ctx_.getLangOpts());
+       lexer.SetCommentRetentionState(true);
+       clang::Token token;
+diff --git a/rs_bindings_from_cc/importers/function.cc b/rs_bindings_from_cc/importers/function.cc
+index 8b2f8b7b5..1880462dc 100644
+--- a/rs_bindings_from_cc/importers/function.cc
++++ b/rs_bindings_from_cc/importers/function.cc
+@@ -397,7 +397,7 @@ std::optional<PropertyFieldInfo> GetPropertyFieldInfo(
+   // through a thunk. Bindings are generated with the same compiler flags as the
+   // C++ code (in particular `-fexperimental-pointer-field-protection-abi`), so
+   // this matches the layout that C++ uses.
+-  if (clang::ASTContext::isPFPField(field_decl)) {
++  if (field_decl->getASTContext().isPFPField(field_decl)) {
+     return std::nullopt;
+   }
+   CcType type = ictx.ConvertQualType(field_decl->getType(),
+@@ -481,7 +481,7 @@ bool ZeroInitIsAllZeroBytes(const clang::ASTContext& ast_context,
+     }
+   }
+   for (const clang::FieldDecl* field : record_decl.fields()) {
+-    if (clang::ASTContext::isPFPField(field) ||
++    if (field->getASTContext().isPFPField(field) ||
+         !ZeroInitIsAllZeroBytes(ast_context, field->getType())) {
+       return false;
+     }
+@@ -926,14 +926,7 @@ std::unique_ptr<ir_proto::Item> FunctionDeclImporter::Import(
+   // See DefineDefaultedFunction in SemaDeclCXX.cpp.
+   // TODO(zarko): This is intentionally very narrow in scope (just for
+   // copy assignments) right now. See b/436870965.
+-  if (auto defaulted_kind =
+-#if LLVM_DEV_DATE_GE(20260818)
+-          // The new API has been introduced in
+-          // https://github.com/llvm/llvm-project/commit/ab547095ead5464dc024d66264d9b8a987f429f3
+-      function_decl->getDefaultedFunctionKind();
+-#else
+-          ictx_.sema_.getDefaultedFunctionKind(function_decl);
+-#endif
++  if (auto defaulted_kind = ictx_.sema_.getDefaultedFunctionKind(function_decl);
+       defaulted_kind.isSpecialMember()) {
+     // TODO(zarko): Possibly eliminate a redundant check here (have we done this
+     // already if function_decl is a function template that is also defaulted?)
