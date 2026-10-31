@@ -169,5 +169,6 @@ src_install() {
 	dobin target/release/{cc_bindings_from_rs,rs_bindings_from_cc}
 
 	insinto usr/$(get_libdir)/${PN}/lib/third_party/crubit
+	doins BUILD.gn crubit.gni
 	doins -r support
 }
