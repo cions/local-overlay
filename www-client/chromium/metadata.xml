@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<use>
+		<flag name="hangouts">Enable support for Google Hangouts features such as screen sharing</flag>
+		<flag name="proprietary-codecs">Enable codecs for patent-encumbered audio and video formats.</flag>
+		<flag name="widevine">Unsupported closed-source DRM capability (required by Netflix VOD)</flag>
+	</use>
+</pkgmetadata>

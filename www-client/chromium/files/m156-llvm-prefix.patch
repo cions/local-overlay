@@ -1,0 +1,369 @@
+--- a/build/android/BUILD.gn
++++ b/build/android/BUILD.gn
+@@ -201,7 +201,7 @@ python_library("test_runner_core_py") {
+     # clang code coverage data after each instrumentation test to
+     # save space. The tool only exists when `checkout_clang_coverage_tools`
+     # gclient custom_var is true.
+-    data += [ "${clang_base_path}/bin/llvm-profdata" ]
++    data += [ "${llvm_prefix}/bin/llvm-profdata" ]
+   }
+ }
+ 
+--- a/build/config/android/config.gni
++++ b/build/config/android/config.gni
+@@ -471,7 +471,7 @@ if (is_android) {
+   android_ndk_library_path = "$android_toolchain_root/lib64"
+ 
+   # Point to Chromium's LLVM for tooling.
+-  android_tool_prefix = "$clang_base_path/bin/llvm-"
++  android_tool_prefix = "$llvm_prefix/bin/llvm-"
+   android_readelf = "${android_tool_prefix}readobj"
+   android_objcopy = "${android_tool_prefix}objcopy"
+ 
+--- a/build/config/android/create_unwind_table.gni
++++ b/build/config/android/create_unwind_table.gni
+@@ -9,7 +9,7 @@ unwind_table_asset_v2_filename = "unwind_cfi_32_v2"
+ _dump_syms_target =
+     "//third_party/breakpad:dump_syms($host_system_allocator_toolchain)"
+ _dump_syms = get_label_info(_dump_syms_target, "root_out_dir") + "/dump_syms"
+-_readobj_path = "$clang_base_path/bin/llvm-readobj"
++_readobj_path = "$llvm_prefix/bin/llvm-readobj"
+ 
+ template("unwind_table_v2") {
+   action(target_name) {
+--- a/build/config/android/rules.gni
++++ b/build/config/android/rules.gni
+@@ -668,10 +668,10 @@ if (!is_robolectric && enable_java_templates) {
+           "$root_out_dir/lib.unstripped/${invoker.lib_name}"
+       inputs = [
+         _lib_path,
+-        "${clang_base_path}/bin/llvm-strip",
++        "${llvm_prefix}/bin/llvm-strip",
+ 
+         # llvm-objcopy is required since llvm-strip symlinks to it.
+-        "${clang_base_path}/bin/llvm-objcopy",
++        "${llvm_prefix}/bin/llvm-objcopy",
+       ]
+       outputs = [
+         _stripped_output_path,
+@@ -688,7 +688,7 @@ if (!is_robolectric && enable_java_templates) {
+       _rebased_unstripped_ouput_path =
+           rebase_path(_unstripped_output_path, root_build_dir)
+       _strip_tool_path =
+-          rebase_path("${clang_base_path}/bin/llvm-strip", root_build_dir)
++          rebase_path("${llvm_prefix}/bin/llvm-strip", root_build_dir)
+ 
+       args = [
+         "--strip-path=$_strip_tool_path",
+--- a/build/config/clang/BUILD.gn
++++ b/build/config/clang/BUILD.gn
+@@ -164,9 +164,9 @@ config("extra_warnings") {
+ 
+ group("llvm-symbolizer_data") {
+   if (is_win) {
+-    data = [ "$clang_base_path/bin/llvm-symbolizer.exe" ]
++    data = [ "$llvm_prefix/bin/llvm-symbolizer.exe" ]
+   } else {
+-    data = [ "$clang_base_path/bin/llvm-symbolizer" ]
++    data = [ "$llvm_prefix/bin/llvm-symbolizer" ]
+   }
+ }
+ 
+--- a/build/config/clang/clang.gni
++++ b/build/config/clang/clang.gni
+@@ -85,6 +85,8 @@ declare_args() {
+ 
+   clang_base_path = default_clang_base_path
+ 
++  llvm_prefix = default_clang_base_path
++
+   # Specifies whether or not bitcode should be embedded during compilation. This
+   # is used for creating a MLGO corpus from Chromium in the non-ThinLTO case.
+   clang_embed_bitcode = false
+--- a/build/config/compiler/BUILD.gn
++++ b/build/config/compiler/BUILD.gn
+@@ -45,7 +45,7 @@ if (is_ios) {
+ # we allow lld_path to be specified.
+ default_lld_path = ""
+ if (!is_clang) {
+-  default_lld_path = "$clang_base_path/bin"
++  default_lld_path = "$llvm_prefix/bin"
+ }
+ 
+ declare_args() {
+--- a/build/config/sanitizers/BUILD.gn
++++ b/build/config/sanitizers/BUILD.gn
+@@ -51,7 +51,7 @@ group("deps") {
+       }
+       data += [
+         "//tools/valgrind/asan/",
+-        "$clang_base_path/bin/llvm-symbolizer${exe}",
++        "$llvm_prefix/bin/llvm-symbolizer${exe}",
+       ]
+     }
+     if (is_asan || is_lsan || is_msan || is_tsan || is_ubsan_any) {
+--- a/build/fuchsia/cipd/BUILD.gn
++++ b/build/fuchsia/cipd/BUILD.gn
+@@ -273,12 +273,12 @@ action("strip_chromedriver_binary") {
+   deps = [ "//chrome/test/chromedriver:chromedriver_server($host_toolchain)" ]
+   script = "//build/gn_run_binary.py"
+   sources = [
+-    "${clang_base_path}/bin/llvm-strip",
++    "${llvm_prefix}/bin/llvm-strip",
+     prog_name,
+   ]
+   outputs = [ _stripped_chromedriver_file ]
+   args = [
+-    rebase_path("${clang_base_path}/bin/llvm-strip", root_build_dir),
++    rebase_path("${llvm_prefix}/bin/llvm-strip", root_build_dir),
+     "--strip-debug",
+     "--strip-unneeded",
+     "-o",
+--- a/build/linux/strip_binary.gni
++++ b/build/linux/strip_binary.gni
+@@ -22,8 +22,8 @@ template("strip_binary") {
+                          ])
+ 
+   action("${target_name}") {
+-    llvm_strip_binary = "${clang_base_path}/bin/llvm-strip"
+-    llvm_objcopy_binary = "${clang_base_path}/bin/llvm-objcopy"
++    llvm_strip_binary = "${llvm_prefix}/bin/llvm-strip"
++    llvm_objcopy_binary = "${llvm_prefix}/bin/llvm-objcopy"
+     script = "//build/linux/strip_binary.py"
+ 
+     if (defined(invoker.stripped_binary_output)) {
+--- a/build/modules/BUILD.gn
++++ b/build/modules/BUILD.gn
+@@ -129,9 +129,9 @@ if (use_unified_system_module) {
+     configs = default_compiler_configs
+     clang_dir = "${clang_base_path}/lib/clang/${clang_version}/include"
+     if (is_win) {
+-      clang = "${clang_base_path}/bin/clang-cl"
++      clang = "${llvm_prefix}/bin/clang-cl"
+     } else {
+-      clang = "${clang_base_path}/bin/clang++"
++      clang = "${llvm_prefix}/bin/clang++"
+     }
+     if (host_os == "win") {
+       clang = "${clang}.exe"
+--- a/build/nocompile.gni
++++ b/build/nocompile.gni
+@@ -116,7 +116,7 @@ if (enable_nocompile_tests) {
+       }
+ 
+       args += [
+-        rebase_path("$clang_base_path/bin/$cxx", root_build_dir),
++        rebase_path("$llvm_prefix/bin/$cxx", root_build_dir),
+         "{{source}}",
+         rebased_obj_path,
+         rebased_depfile_path,
+--- a/build/rust/rust_bindgen_generator.gni
++++ b/build/rust/rust_bindgen_generator.gni
+@@ -191,15 +191,6 @@ template("rust_bindgen_generator") {
+       ]
+     }
+ 
+-    if (is_linux) {
+-      # Linux clang, and clang libs, use a shared libstdc++, which we must
+-      # point to.
+-      args += [
+-        "--ld-library-path",
+-        rebase_path(clang_base_path + "/lib", root_build_dir),
+-      ]
+-    }
+-
+     args += [ "--bindgen-flags" ]
+     if (defined(invoker.bindgen_flags)) {
+       foreach(flag, invoker.bindgen_flags) {
+--- a/build/toolchain/android/BUILD.gn
++++ b/build/toolchain/android/BUILD.gn
+@@ -36,7 +36,7 @@ template("android_clang_toolchain") {
+     enable_linker_map = true
+ 
+     use_mold_separate_debug_file = true
+-    strip = rebase_path("$clang_base_path/bin/llvm-strip", root_build_dir)
++    strip = rebase_path("$llvm_prefix/bin/llvm-strip", root_build_dir)
+ 
+     use_unstripped_as_runtime_outputs = android_unstripped_runtime_outputs
+ 
+--- a/build/toolchain/apple/toolchain.gni
++++ b/build/toolchain/apple/toolchain.gni
+@@ -159,7 +159,7 @@ template("single_apple_toolchain") {
+       toolchain_is_component_build = is_component_build
+     }
+ 
+-    prefix = rebase_path("$clang_base_path/bin/", root_build_dir)
++    prefix = rebase_path("$llvm_prefix/bin/", root_build_dir)
+     _cc = "${prefix}clang"
+     _cxx = "${prefix}clang++"
+ 
+--- a/build/toolchain/fuchsia/BUILD.gn
++++ b/build/toolchain/fuchsia/BUILD.gn
+@@ -15,7 +15,7 @@ template("fuchsia_clang_toolchain") {
+     # While we want use stripped binaries on the device, we need to retain the
+     # unstripped binaries in runtime_deps to make them available for the test
+     # isolates to enable symbolizing on bots.
+-    strip = rebase_path("${clang_base_path}/bin/llvm-strip", root_build_dir)
++    strip = rebase_path("${llvm_prefix}/bin/llvm-strip", root_build_dir)
+     use_unstripped_as_runtime_outputs = true
+ 
+     default_shlib_subdir = "/lib"
+--- a/build/toolchain/gcc_toolchain.gni
++++ b/build/toolchain/gcc_toolchain.gni
+@@ -1026,7 +1026,7 @@ template("gcc_toolchain") {
+ # actually just be doing a native compile.
+ template("clang_toolchain") {
+   gcc_toolchain(target_name) {
+-    _path = "$clang_base_path/bin"
++    _path = "$llvm_prefix/bin"
+     _is_path_absolute = get_path_info(_path, "abspath") == _path
+ 
+     # Preserve absolute paths for tools like distcc.
+--- a/build/toolchain/win/toolchain.gni
++++ b/build/toolchain/win/toolchain.gni
+@@ -24,7 +24,7 @@ if (host_os == "win") {
+   _exe = ""
+ }
+ 
+-_clang_bin_path = rebase_path("$clang_base_path/bin", root_build_dir)
++_clang_bin_path = rebase_path("$llvm_prefix/bin", root_build_dir)
+ 
+ # Makes a single MSVC toolchain.
+ #
+@@ -303,7 +303,7 @@ template("msvc_toolchain") {
+         }
+       } else {
+         if (toolchain_is_clang && !disable_llvm_ml) {
+-          prefix = rebase_path("$clang_base_path/bin", root_build_dir)
++          prefix = rebase_path("$llvm_prefix/bin", root_build_dir)
+           ml = "$prefix/llvm-ml${_exe}"
+           if (toolchain_args.current_cpu == "x64") {
+             ml += " -m64"
+--- a/chrome/BUILD.gn
++++ b/chrome/BUILD.gn
+@@ -493,7 +493,7 @@ if (is_win) {
+   if (host_os == "mac") {
+     objdump_path = mac_bin_path
+   } else {
+-    objdump_path = rebase_path("$clang_base_path/bin/", root_build_dir)
++    objdump_path = rebase_path("$llvm_prefix/bin/", root_build_dir)
+   }
+ 
+   group("chrome") {
+@@ -1464,7 +1464,7 @@ if (is_win) {
+         args += [ "--nm-path=$mac_bin_path/nm" ]
+       } else {
+         args += [ "--nm-path=" +
+-                  rebase_path("$clang_base_path/bin/llvm-nm", root_build_dir) ]
++                  rebase_path("$llvm_prefix/bin/llvm-nm", root_build_dir) ]
+       }
+       outputs = [ stamp_file ]
+       public_deps = [ ":chrome_framework" ]
+--- a/chromecast/resource_sizes/BUILD.gn
++++ b/chromecast/resource_sizes/BUILD.gn
+@@ -8,10 +8,10 @@ import("//build/config/python.gni")
+ python_library("chromecast_resource_sizes_py") {
+   pydeps_file = "chromecast_resource_sizes.pydeps"
+   data = [
+-    "${clang_base_path}/bin/llvm-strip",
++    "${llvm_prefix}/bin/llvm-strip",
+ 
+     # llvm-objcopy is required since llvm-strip symlinks to it.
+-    "${clang_base_path}/bin/llvm-objcopy",
++    "${llvm_prefix}/bin/llvm-objcopy",
+   ]
+   data_deps = [ "//third_party/catapult/tracing:convert_chart_json" ]
+ }
+--- a/chromecast/resource_sizes/chromecast_resource_sizes.gni
++++ b/chromecast/resource_sizes/chromecast_resource_sizes.gni
+@@ -19,7 +19,7 @@ template("chromecast_resource_sizes_test") {
+       "--chromium-output-directory",
+       "@WrappedPath(.)",
+       "--llvm-strip-path",
+-      rebase_path("${clang_base_path}/bin/llvm-strip", root_build_dir),
++      rebase_path("${llvm_prefix}/bin/llvm-strip", root_build_dir),
+     ]
+   }
+ }
+--- a/third_party/crashpad/crashpad/util/BUILD.gn
++++ b/third_party/crashpad/crashpad/util/BUILD.gn
+@@ -62,7 +62,7 @@ if (crashpad_is_apple && !crashpad_is_tvos) {
+         import("//build/config/clang/clang.gni")
+         import("//build/config/mac/mac_sdk.gni")
+         clang_path =
+-            rebase_path("$clang_base_path/bin/", root_build_dir) + "clang"
++            rebase_path("$llvm_prefix/bin/", root_build_dir) + "clang"
+         if (host_os == "mac") {
+           mig_path = "$mac_bin_path" + "mig"
+           migcom_path = "$mac_bin_path" + "../libexec/migcom"
+--- a/third_party/dawn/src/dawn/node/BUILD.gn
++++ b/third_party/dawn/src/dawn/node/BUILD.gn
+@@ -267,7 +267,7 @@ if (is_win) {
+     inputs = [ "$dawn_node_gen_dir/NapiSymbols.def" ]
+     outputs = [ "$dawn_node_gen_dir/NapiSymbols.lib" ]
+     script = run_built_binary_script
+-    linker = rebase_path("$clang_base_path/bin/lld-link${_exe}", root_build_dir)
++    linker = rebase_path("$llvm_prefix/bin/lld-link${_exe}", root_build_dir)
+ 
+     args = [
+       "",
+--- a/third_party/dawn/third_party/meson/meson_target.gni
++++ b/third_party/dawn/third_party/meson/meson_target.gni
+@@ -76,8 +76,8 @@ template("_meson_setup") {
+ 
+   # Use the hermetic clang toolchain
+   if (is_clang) {
+-    _cc_path = rebase_path("$clang_base_path/bin/clang")
+-    _cxx_path = rebase_path("$clang_base_path/bin/clang++")
++    _cc_path = rebase_path("$llvm_prefix/bin/clang")
++    _cxx_path = rebase_path("$llvm_prefix/bin/clang++")
+ 
+     # The pre-compiled version of llvm-config from CIPD returns a hard
+     # coded path to a system installed libzstd, so need to intercept
+@@ -136,8 +136,8 @@ template("_meson_setup") {
+       "[binaries]",
+       "c = '${_cc_path}'",
+       "cpp = '${_cxx_path}'",
+-      "ar = '" + rebase_path("$clang_base_path/bin/llvm-ar") + "'",
+-      "strip = '" + rebase_path("$clang_base_path/bin/llvm-strip") + "'",
++      "ar = '" + rebase_path("$llvm_prefix/bin/llvm-ar") + "'",
++      "strip = '" + rebase_path("$llvm_prefix/bin/llvm-strip") + "'",
+       "pkg-config = 'pkg-config'",
+       "python = ['vpython3', '-vpython-spec', '" +
+           rebase_path("${dawn_root}/vpython.toml") + "']",
+--- a/tools/binary_size/sizes.gni
++++ b/tools/binary_size/sizes.gni
+@@ -33,8 +33,8 @@ template("sizes_test") {
+     }
+     if (!is_win) {
+       data += [
+-        "${clang_base_path}/bin/llvm-strip",
+-        "${clang_base_path}/bin/llvm-objcopy",
++        "${llvm_prefix}/bin/llvm-strip",
++        "${llvm_prefix}/bin/llvm-objcopy",
+       ]
+     }
+ 
+--- a/tools/pgo/BUILD.gn
++++ b/tools/pgo/BUILD.gn
+@@ -73,9 +73,9 @@ template("generate_profile_test") {
+ 
+     # This avoids generate_profile.py attempting to download it on demand.
+     if (is_win) {
+-      data = [ "${clang_base_path}/bin/llvm-profdata.exe" ]
++      data = [ "${llvm_prefix}/bin/llvm-profdata.exe" ]
+     } else {
+-      data = [ "${clang_base_path}/bin/llvm-profdata" ]
++      data = [ "${llvm_prefix}/bin/llvm-profdata" ]
+     }
+   }
+ }
+@@ -111,7 +111,7 @@ if (is_android) {
+ 
+       # This avoids generate_profile_webview.py attempting to download it on
+       # demand.
+-      data = [ "${clang_base_path}/bin/llvm-profdata" ]
++      data = [ "${llvm_prefix}/bin/llvm-profdata" ]
+     }
+   }
+ } else if (!is_castos && !is_ios && !is_fuchsia) {

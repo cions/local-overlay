@@ -1,0 +1,31 @@
+--- a/build/config/clang/BUILD.gn
++++ b/build/config/clang/BUILD.gn
+@@ -200,22 +200,17 @@
+       } else if (is_apple) {
+         _dir = "darwin"
+       } else if (is_linux || is_chromeos) {
++        _dir = "linux"
+         if (current_cpu == "x64") {
+-          _dir = "x86_64-unknown-linux-gnu"
++          _suffix = "-x86_64"
+         } else if (current_cpu == "x86") {
+-          _dir = "i386-unknown-linux-gnu"
++          _suffix = "-i686"
+         } else if (current_cpu == "arm") {
+-          _dir = "armv7-unknown-linux-gnueabihf"
++          _suffix = "-arm"
+         } else if (current_cpu == "arm64") {
+-          _dir = "aarch64-unknown-linux-gnu"
+-        } else if (current_cpu == "loong64") {
+-          _dir = "loongarch64-unknown-linux-gnu"
++          _suffix = "-aarch64"
+         } else if (current_cpu == "riscv64") {
+-          _dir = "riscv64-unknown-linux-gnu"
+-        } else if (current_cpu == "ppc64") {
+-          _dir = "ppc64le-unknown-linux-gnu"
+-        } else if (current_cpu == "s390x") {
+-          _dir = "s390x-unknown-linux-gnu"
++          _suffix = "-riscv64"
+         } else {
+           assert(false)  # Unhandled cpu type
+         }

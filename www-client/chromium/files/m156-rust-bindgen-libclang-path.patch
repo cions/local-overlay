@@ -1,0 +1,40 @@
+--- a/build/config/rust.gni
++++ b/build/config/rust.gni
+@@ -62,6 +62,7 @@
+   # Directory under which to find `bin/bindgen` (a `bin` directory containing
+   # the bindgen exectuable).
+   rust_bindgen_root = "//third_party/rust-toolchain"
++  rust_bindgen_libclang_path = ""
+ 
+   # If you're using a Rust toolchain as specified by rust_sysroot_absolute,
+   # set this to the output of `rustc -V`. Changing this string will cause all
+--- a/build/rust/rust_bindgen.gni
++++ b/build/rust/rust_bindgen.gni
+@@ -20,8 +20,10 @@
+ # On Windows, the libclang.dll is beside the bindgen.exe, otherwise it is in
+ # ../lib.
+ _libclang_path = rust_bindgen_root
+-if (!use_chromium_rust_toolchain &&
+-    (current_cpu == "ppc64" || current_cpu == "s390x")) {
++if (rust_bindgen_libclang_path != "") {
++  _libclang_path = rust_bindgen_libclang_path
++} else if (!use_chromium_rust_toolchain &&
++           (current_cpu == "ppc64" || current_cpu == "s390x")) {
+   _libclang_path = rust_sysroot_absolute + "/lib64"
+ } else if (host_os == "win") {
+   _libclang_path += "/bin"
+--- a/build/rust/rust_bindgen_generator.gni
++++ b/build/rust/rust_bindgen_generator.gni
+@@ -27,8 +27,10 @@
+ # On Windows, the libclang.dll is beside the bindgen.exe, otherwise it is in
+ # ../lib.
+ _libclang_path = rust_bindgen_root
+-if (!use_chromium_rust_toolchain &&
+-    (host_cpu == "ppc64" || host_cpu == "s390x")) {
++if (rust_bindgen_libclang_path != "") {
++  _libclang_path = rust_bindgen_libclang_path
++} else if (!use_chromium_rust_toolchain &&
++           (host_cpu == "ppc64" || host_cpu == "s390x")) {
+   _libclang_path = rust_sysroot_absolute + "/lib64"
+ } else if (host_os == "win") {
+   _libclang_path += "/bin"
