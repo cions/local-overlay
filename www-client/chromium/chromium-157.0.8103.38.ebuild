@@ -88,6 +88,7 @@ RDEPEND="
 BDEPEND="${RDEPEND}
 	${PYTHON_DEPS}
 	$(python_gen_any_dep '
+		dev-python/clang[${PYTHON_USEDEP}]
 		dev-python/setuptools[${PYTHON_USEDEP}]
 	')
 	$(llvm_gen_dep '
@@ -116,15 +117,16 @@ BDEPEND="${RDEPEND}
 	x11-misc/xdg-utils"
 
 PATCHES=(
-	"${FILESDIR}"/m156-compiler-builtins.patch
-	"${FILESDIR}"/m156-compiler-warnings.patch
-	"${FILESDIR}"/m156-rust-bindgen-libclang-path.patch
-	"${FILESDIR}"/m156-rust-sysroot.patch
-	"${FILESDIR}"/m156-system-crubit.patch
-	"${FILESDIR}"/m156-llvm-prefix.patch
+	"${FILESDIR}"/m157-compiler-builtins.patch
+	"${FILESDIR}"/m157-compiler-warnings.patch
+	"${FILESDIR}"/m157-llvm-prefix.patch
+	"${FILESDIR}"/m157-rust-bindgen-libclang-path.patch
+	"${FILESDIR}"/m157-rust-sysroot.patch
+	"${FILESDIR}"/m157-system-crubit.patch
 )
 
 python_check_deps() {
+	python_has_version "dev-python/clang[${PYTHON_USEDEP}]"
 	python_has_version "dev-python/setuptools[${PYTHON_USEDEP}]"
 }
 
@@ -194,7 +196,8 @@ src_configure() {
 		"use_sysroot=false"
 		"use_system_libffi=true"
 		"use_vaapi=$(usex vaapi true false)"
-		"v8_use_metagen_instance_types=false"
+		"v8_metagen_libclang_so=\"$(get_llvm_prefix -b)/$(get_libdir)/libclang.so\""
+		"v8_metagen_libclang_bindings_dir=\"$(python_get_sitedir)\""
 	)
 
 	einfo "Configuring Chromium ..."

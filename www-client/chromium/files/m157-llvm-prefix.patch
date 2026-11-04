@@ -11,7 +11,7 @@
  
 --- a/build/config/android/config.gni
 +++ b/build/config/android/config.gni
-@@ -471,7 +471,7 @@ if (is_android) {
+@@ -459,7 +459,7 @@ if (is_android) {
    android_ndk_library_path = "$android_toolchain_root/lib64"
  
    # Point to Chromium's LLVM for tooling.
@@ -57,7 +57,7 @@
          "--strip-path=$_strip_tool_path",
 --- a/build/config/clang/BUILD.gn
 +++ b/build/config/clang/BUILD.gn
-@@ -164,9 +164,9 @@ config("extra_warnings") {
+@@ -168,9 +168,9 @@ config("extra_warnings") {
  
  group("llvm-symbolizer_data") {
    if (is_win) {
@@ -159,7 +159,7 @@
          rebased_depfile_path,
 --- a/build/rust/rust_bindgen_generator.gni
 +++ b/build/rust/rust_bindgen_generator.gni
-@@ -191,15 +191,6 @@ template("rust_bindgen_generator") {
+@@ -187,15 +187,6 @@ template("rust_bindgen_generator") {
        ]
      }
  
@@ -188,7 +188,7 @@
  
 --- a/build/toolchain/apple/toolchain.gni
 +++ b/build/toolchain/apple/toolchain.gni
-@@ -159,7 +159,7 @@ template("single_apple_toolchain") {
+@@ -175,7 +175,7 @@ template("single_apple_toolchain") {
        toolchain_is_component_build = is_component_build
      }
  
@@ -239,131 +239,3 @@
            ml = "$prefix/llvm-ml${_exe}"
            if (toolchain_args.current_cpu == "x64") {
              ml += " -m64"
---- a/chrome/BUILD.gn
-+++ b/chrome/BUILD.gn
-@@ -493,7 +493,7 @@ if (is_win) {
-   if (host_os == "mac") {
-     objdump_path = mac_bin_path
-   } else {
--    objdump_path = rebase_path("$clang_base_path/bin/", root_build_dir)
-+    objdump_path = rebase_path("$llvm_prefix/bin/", root_build_dir)
-   }
- 
-   group("chrome") {
-@@ -1464,7 +1464,7 @@ if (is_win) {
-         args += [ "--nm-path=$mac_bin_path/nm" ]
-       } else {
-         args += [ "--nm-path=" +
--                  rebase_path("$clang_base_path/bin/llvm-nm", root_build_dir) ]
-+                  rebase_path("$llvm_prefix/bin/llvm-nm", root_build_dir) ]
-       }
-       outputs = [ stamp_file ]
-       public_deps = [ ":chrome_framework" ]
---- a/chromecast/resource_sizes/BUILD.gn
-+++ b/chromecast/resource_sizes/BUILD.gn
-@@ -8,10 +8,10 @@ import("//build/config/python.gni")
- python_library("chromecast_resource_sizes_py") {
-   pydeps_file = "chromecast_resource_sizes.pydeps"
-   data = [
--    "${clang_base_path}/bin/llvm-strip",
-+    "${llvm_prefix}/bin/llvm-strip",
- 
-     # llvm-objcopy is required since llvm-strip symlinks to it.
--    "${clang_base_path}/bin/llvm-objcopy",
-+    "${llvm_prefix}/bin/llvm-objcopy",
-   ]
-   data_deps = [ "//third_party/catapult/tracing:convert_chart_json" ]
- }
---- a/chromecast/resource_sizes/chromecast_resource_sizes.gni
-+++ b/chromecast/resource_sizes/chromecast_resource_sizes.gni
-@@ -19,7 +19,7 @@ template("chromecast_resource_sizes_test") {
-       "--chromium-output-directory",
-       "@WrappedPath(.)",
-       "--llvm-strip-path",
--      rebase_path("${clang_base_path}/bin/llvm-strip", root_build_dir),
-+      rebase_path("${llvm_prefix}/bin/llvm-strip", root_build_dir),
-     ]
-   }
- }
---- a/third_party/crashpad/crashpad/util/BUILD.gn
-+++ b/third_party/crashpad/crashpad/util/BUILD.gn
-@@ -62,7 +62,7 @@ if (crashpad_is_apple && !crashpad_is_tvos) {
-         import("//build/config/clang/clang.gni")
-         import("//build/config/mac/mac_sdk.gni")
-         clang_path =
--            rebase_path("$clang_base_path/bin/", root_build_dir) + "clang"
-+            rebase_path("$llvm_prefix/bin/", root_build_dir) + "clang"
-         if (host_os == "mac") {
-           mig_path = "$mac_bin_path" + "mig"
-           migcom_path = "$mac_bin_path" + "../libexec/migcom"
---- a/third_party/dawn/src/dawn/node/BUILD.gn
-+++ b/third_party/dawn/src/dawn/node/BUILD.gn
-@@ -267,7 +267,7 @@ if (is_win) {
-     inputs = [ "$dawn_node_gen_dir/NapiSymbols.def" ]
-     outputs = [ "$dawn_node_gen_dir/NapiSymbols.lib" ]
-     script = run_built_binary_script
--    linker = rebase_path("$clang_base_path/bin/lld-link${_exe}", root_build_dir)
-+    linker = rebase_path("$llvm_prefix/bin/lld-link${_exe}", root_build_dir)
- 
-     args = [
-       "",
---- a/third_party/dawn/third_party/meson/meson_target.gni
-+++ b/third_party/dawn/third_party/meson/meson_target.gni
-@@ -76,8 +76,8 @@ template("_meson_setup") {
- 
-   # Use the hermetic clang toolchain
-   if (is_clang) {
--    _cc_path = rebase_path("$clang_base_path/bin/clang")
--    _cxx_path = rebase_path("$clang_base_path/bin/clang++")
-+    _cc_path = rebase_path("$llvm_prefix/bin/clang")
-+    _cxx_path = rebase_path("$llvm_prefix/bin/clang++")
- 
-     # The pre-compiled version of llvm-config from CIPD returns a hard
-     # coded path to a system installed libzstd, so need to intercept
-@@ -136,8 +136,8 @@ template("_meson_setup") {
-       "[binaries]",
-       "c = '${_cc_path}'",
-       "cpp = '${_cxx_path}'",
--      "ar = '" + rebase_path("$clang_base_path/bin/llvm-ar") + "'",
--      "strip = '" + rebase_path("$clang_base_path/bin/llvm-strip") + "'",
-+      "ar = '" + rebase_path("$llvm_prefix/bin/llvm-ar") + "'",
-+      "strip = '" + rebase_path("$llvm_prefix/bin/llvm-strip") + "'",
-       "pkg-config = 'pkg-config'",
-       "python = ['vpython3', '-vpython-spec', '" +
-           rebase_path("${dawn_root}/vpython.toml") + "']",
---- a/tools/binary_size/sizes.gni
-+++ b/tools/binary_size/sizes.gni
-@@ -33,8 +33,8 @@ template("sizes_test") {
-     }
-     if (!is_win) {
-       data += [
--        "${clang_base_path}/bin/llvm-strip",
--        "${clang_base_path}/bin/llvm-objcopy",
-+        "${llvm_prefix}/bin/llvm-strip",
-+        "${llvm_prefix}/bin/llvm-objcopy",
-       ]
-     }
- 
---- a/tools/pgo/BUILD.gn
-+++ b/tools/pgo/BUILD.gn
-@@ -73,9 +73,9 @@ template("generate_profile_test") {
- 
-     # This avoids generate_profile.py attempting to download it on demand.
-     if (is_win) {
--      data = [ "${clang_base_path}/bin/llvm-profdata.exe" ]
-+      data = [ "${llvm_prefix}/bin/llvm-profdata.exe" ]
-     } else {
--      data = [ "${clang_base_path}/bin/llvm-profdata" ]
-+      data = [ "${llvm_prefix}/bin/llvm-profdata" ]
-     }
-   }
- }
-@@ -111,7 +111,7 @@ if (is_android) {
- 
-       # This avoids generate_profile_webview.py attempting to download it on
-       # demand.
--      data = [ "${clang_base_path}/bin/llvm-profdata" ]
-+      data = [ "${llvm_prefix}/bin/llvm-profdata" ]
-     }
-   }
- } else if (!is_castos && !is_ios && !is_fuchsia) {

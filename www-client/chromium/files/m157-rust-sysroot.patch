@@ -1,6 +1,6 @@
 --- a/build/config/rust.gni
 +++ b/build/config/rust.gni
-@@ -433,7 +433,7 @@
+@@ -454,7 +454,7 @@ rustc_wrapper_inputs = [
  ]
  
  if (host_os == "win") {
@@ -12,7 +12,7 @@
  }
 --- a/build/rust/cargo_crate.gni
 +++ b/build/rust/cargo_crate.gni
-@@ -464,9 +464,9 @@
+@@ -482,9 +482,9 @@ template("cargo_crate") {
        ]
  
        if (host_os == "win") {
@@ -26,7 +26,7 @@
        build_script_target = ":${_build_script_name}($rust_macro_toolchain)"
 --- a/build/rust/std/BUILD.gn
 +++ b/build/rust/std/BUILD.gn
-@@ -269,9 +269,9 @@
+@@ -310,9 +310,9 @@ if (toolchain_has_rust) {
        out_depfile = rebase_path(depfile, root_build_dir)
  
        if (host_os == "win") {
