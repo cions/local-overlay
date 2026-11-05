@@ -9,24 +9,18 @@ NODE_MIN_VER="24.16.0-r1"
 ESBUILD_VER="0.28.2"
 TSC_MIN_VER="7.0.2"
 LLVM_COMPAT=( 23 )
-PYTHON_COMPAT=( python3_{11..14} )
+PYTHON_COMPAT=( python3_{11..15} )
 PYTHON_REQ_USE="xml(+)"
 RUST_MIN_VER="1.91.0"
 RUST_NEEDS_LLVM="1"
 RUST_REQ_USE="rustfmt"
 
-CHROMIUM_LANGS="
-	af am ar bg bn ca cs da de el en-GB es es-419 et fa fi fil fr gu he hi hr
-	hu id it ja kn ko lt lv ml mr ms nb nl pl pt-BR pt-PT ro ru sk sl sr sv sw
-	ta te th tr uk ur vi zh-CN zh-TW"
-
-inherit chromium-2 desktop edo flag-o-matic llvm-r1 multiprocessing ninja-utils pax-utils python-any-r1 rust toolchain-funcs xdg-utils
+inherit desktop edo flag-o-matic llvm-r1 multiprocessing ninja-utils pax-utils python-any-r1 rust toolchain-funcs xdg-utils
 
 DESCRIPTION="the open-source browser behind the Google Chrome"
 HOMEPAGE="https://www.chromium.org/"
 SRC_URI="https://github.com/chromium-linux-tarballs/chromium-tarballs/releases/download/${PV}/chromium-${PV}-linux.tar.xz"
 
-# https://gitweb.gentoo.org/proj/chromium-tools.git/tree/get-chromium-licences.py @ 145.0.7632.76
 LICENSE="Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD BSD-2 Base64 Boost-1.0 CC-BY-3.0 CC-BY-4.0 Clear-BSD FFT2D FTL"
 LICENSE+=" IJG ISC LGPL-2 LGPL-2.1 MIT MPL-1.1 MPL-2.0 Ms-PL PSF-2 SGI-B-2.0 SSLeay SunSoft Unicode-3.0"
 LICENSE+=" Unicode-DFS-2015 Unlicense UoI-NCSA ZLIB libtiff openssl"
@@ -35,7 +29,21 @@ SLOT="stable"
 KEYWORDS="~amd64"
 RESTRICT="mirror"
 
+CHROMIUM_LANGS="
+	af am ar bg bn ca cs da de el en-GB es es-419 et fa fi fil fr gu he hi hr
+	hu id it ja kn ko lt lv ml mr ms nb nl pl pt-BR pt-PT ro ru sk sl sr sv sw
+	ta te th tr uk ur vi zh-CN zh-TW
+"
 IUSE="cups +hangouts +proprietary-codecs +vaapi wayland +widevine"
+
+_chromium_set_l10n_IUSE() {
+	local lang
+	for lang in ${CHROMIUM_LANGS}; do
+		IUSE+=" +l10n_${lang}"
+	done
+}
+_chromium_set_l10n_IUSE
+unset -f _chromium_set_l10n_IUSE
 
 RDEPEND="
 	>=app-accessibility/at-spi2-core-2.46.0:2
@@ -63,7 +71,6 @@ RDEPEND="
 	sys-libs/zlib:=[minizip]
 	virtual/ttf-fonts
 	virtual/udev
-	>=www-client/chromium-common-2
 	x11-base/xorg-proto:=
 	x11-libs/cairo:=
 	x11-libs/gdk-pixbuf:2
@@ -239,28 +246,27 @@ src_install() {
 	doexe out/Release/chromedriver
 	doexe out/Release/chrome_crashpad_handler
 
-	cat <<- EOF > "${D}${CHROMIUM_HOME}/chromium-launcher.sh" || die
-	#!/bin/bash
-	# Wrapper to launch slotted Chromium via the chromium-common launcher script.
-	export CHROME_DESKTOP="chromium-browser${browser_suffix}.desktop"
-	export CHROME_EXEC_NAME="chromium-browser${browser_suffix}"
-	export CHROME_VERSION_EXTRA="${SLOT}"
-	export CHROME_WRAPPER="\$(readlink -f "\$0")"
-	export OZONE_AUTO_SESSION="true"
-
-	exec /usr/libexec/chromium/chromium-launcher.sh "\$@"
-	EOF
-	fperms 0755 "${CHROMIUM_HOME}/chromium-launcher.sh"
-
 	dosym "${CHROMIUM_HOME}/chromium-launcher.sh" "/usr/bin/chromium-browser${browser_suffix}"
 	dosym "${CHROMIUM_HOME}/chromium-launcher.sh" "/usr/bin/chromium${browser_suffix}"
 	dosym "${CHROMIUM_HOME}/chromedriver" "/usr/bin/chromedriver${browser_suffix}"
 
 	pushd out/Release/locales >/dev/null || die
-	chromium_remove_language_paks
+	local lang pak
+	for lang in ${CHROMIUM_LANGS}; do
+		[[ -f "${lang}.pak" ]] || eqawarn "no .pak file for ${lang}"
+	done
+	for pak in *.pak; do
+		lang="${pak%.pak}"
+		lang="${lang%%_*}"
+		[[ "${lang}" == en-US ]] && continue
+		has "${lang}" ${CHROMIUM_LANGS} || eqawarn "no ${lang} in CHROMIUM_LANGS"
+		use "l10n_${lang}" || rm -f "${pak}" "${pak}.info" || die
+	done
+	rm -f fake-bidi.pak fake-bidi.pak.info || die
 	popd >/dev/null || die
 
 	insinto "${CHROMIUM_HOME}"
+	doins "${FILESDIR}/chromium-launcher.sh"
 	doins out/Release/*.bin
 	doins out/Release/*.pak
 	doins out/Release/*.so
