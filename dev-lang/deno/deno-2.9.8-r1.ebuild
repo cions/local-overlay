@@ -1060,8 +1060,10 @@ inherit cargo llvm-r2 shell-completion toolchain-funcs
 
 DESCRIPTION="A modern runtime for JavaScript and TypeScript."
 HOMEPAGE="https://deno.com/"
-SRC_URI="https://github.com/denoland/deno/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
-	${CARGO_CRATE_URIS}"
+SRC_URI="
+	https://github.com/denoland/deno/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
+	${CARGO_CRATE_URIS}
+"
 
 LICENSE="MIT"
 # Dependent crate licenses
@@ -1072,6 +1074,7 @@ LICENSE+="
 "
 SLOT="0"
 KEYWORDS="~amd64"
+RESTRICT="mirror test"
 
 RDEPEND="!dev-lang/deno-bin"
 BDEPEND="
@@ -1081,7 +1084,8 @@ BDEPEND="
 	')
 	dev-build/gn
 	dev-build/ninja
-	dev-util/bindgen"
+	dev-util/bindgen
+"
 
 pkg_setup() {
 	llvm-r2_pkg_setup
@@ -1094,7 +1098,7 @@ src_prepare() {
 	eapply "${FILESDIR}"/rusty_v8-compiler-builtins.patch
 	eapply "${FILESDIR}"/rusty_v8-rust-bindgen-libclang-path.patch
 	eapply "${FILESDIR}"/rusty_v8-rust-sysroot.patch
-	sed -i '/download_rust_toolchain();/d' build.rs
+	sed -i '/download_rust_toolchain();/d' build.rs || die
 
 	mkdir -p third_party/icu/common
 	cp "${FILESDIR}"/icudtl.dat third_party/icu/common/icudtl.dat
@@ -1146,15 +1150,13 @@ src_compile() {
 }
 
 src_install() {
-	local DENO_BIN="${S}/target/release/deno"
+	dobin "$(cargo_target_dir)"/deno
 
-	dobin "${DENO_BIN}"
+	"$(cargo_target_dir)"/deno completions bash > "${T}"/deno.bash || die
+	"$(cargo_target_dir)"/deno completions fish > "${T}"/deno.fish || die
+	"$(cargo_target_dir)"/deno completions zsh > "${T}"/deno.zsh || die
 
-	"${DENO_BIN}" completions bash > "${T}"/deno || die
-	"${DENO_BIN}" completions fish > "${T}"/deno.fish || die
-	"${DENO_BIN}" completions zsh > "${T}"/_deno || die
-
-	dobashcomp "${T}"/deno
-	dofishcomp "${T}"/deno.fish
-	dozshcomp "${T}"/_deno
+	newbashcomp "${T}"/deno.bash deno
+	newfishcomp "${T}"/deno.fish deno
+	newzshcomp "${T}"/deno.zsh _deno
 }
