@@ -414,7 +414,7 @@ SRC_URI="
 LICENSE="Apache-2.0 BSD BSD-2 ISC LGPL-2 LGPL-2.1 MIT Unicode-3.0 ZLIB openssl"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="system-bootstrap"
+IUSE="+system-bootstrap"
 RESTRICT="mirror test"
 
 S="${WORKDIR}/bun-bun-v${PV}"
