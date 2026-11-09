@@ -15,7 +15,7 @@ RUST_MIN_VER="1.91.0"
 RUST_NEEDS_LLVM="1"
 RUST_REQ_USE="rustfmt"
 
-inherit desktop edo flag-o-matic llvm-r1 multiprocessing ninja-utils pax-utils python-any-r1 rust toolchain-funcs xdg-utils
+inherit desktop edo flag-o-matic llvm-r2 multiprocessing ninja-utils pax-utils python-any-r1 rust toolchain-funcs xdg-utils
 
 DESCRIPTION="the open-source browser behind the Google Chrome"
 HOMEPAGE="https://www.chromium.org/"
@@ -143,7 +143,6 @@ pkg_setup() {
 	rust_pkg_setup
 
 	filter-lto
-	chromium_suid_sandbox_check_kernel_config
 }
 
 restore_binary() {

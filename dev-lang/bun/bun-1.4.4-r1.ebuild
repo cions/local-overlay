@@ -370,7 +370,7 @@ RUST_MIN_VER="1.99.0"
 RUST_MAX_VER="${RUST_MIN_VER}"
 RUST_NEEDS_LLVM=1
 
-inherit cargo edo flag-o-matic llvm-r1 multiprocessing python-any-r1 ruby-single shell-completion toolchain-funcs
+inherit cargo edo flag-o-matic llvm-r2 multiprocessing python-any-r1 ruby-single shell-completion toolchain-funcs
 
 DESCRIPTION="Incredibly fast JavaScript runtime, bundler, test runner, and package manager"
 HOMEPAGE="https://bun.com/"
