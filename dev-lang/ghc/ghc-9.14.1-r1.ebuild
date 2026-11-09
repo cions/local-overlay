@@ -6,7 +6,7 @@ EAPI=8
 BOOTSTRAP_PV="9.12.2"
 PYTHON_COMPAT=( python3_{11..15} )
 
-inherit edo multiprocessing python-any-r1 toolchain-funcs
+inherit edo flag-o-matic multiprocessing python-any-r1 toolchain-funcs
 
 DESCRIPTION="The Glasgow Haskell Compiler"
 HOMEPAGE="https://www.haskell.org/ghc/"
@@ -74,21 +74,19 @@ src_configure() {
 
 	econf "${econf_args[@]}"
 
-	local GHC_FLAGS=(
-		-mbmi2
-		-msse4.2
-		-mavx512f
-		-mavx512cd
-		-mfma
-		-optc-O2
-		-optc-march=native
-		-optl-Wl,-z,relro
-		-optl-Wl,-z,now
-	)
+	filter-lto
+
+	GHC_OPTIONS="${HCFLAGS}"
+	local flag
+	for flag in ${CFLAGS}; do
+		GHC_OPTIONS+=" -optc${flag}"
+	done
+	GHC_OPTIONS+=" -optl-Wl,-z,relro"
+	GHC_OPTIONS+=" -optl-Wl,-z,now"
 
 	mkdir _build || die
-	echo "*.*.ghc.*.opts += ${GHC_FLAGS[*]}" >> _build/hadrian.settings
-	echo "*.*.cc.*.opts += ${GHC_FLAGS[*]}" >> _build/hadrian.settings
+	echo "*.*.ghc.*.opts += ${GHC_OPTIONS}" >> _build/hadrian.settings
+	echo "*.*.cc.*.opts += ${GHC_OPTIONS}" >> _build/hadrian.settings
 }
 
 src_compile() {
