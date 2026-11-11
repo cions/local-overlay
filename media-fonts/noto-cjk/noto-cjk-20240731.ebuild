@@ -1,4 +1,4 @@
-# Copyright 1999-2026 Gentoo Authors
+# Copyright 2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -6,17 +6,17 @@ EAPI=8
 inherit font
 
 DESCRIPTION="Google's CJK font family"
-HOMEPAGE="https://fonts.google.com/noto https://github.com/notofonts/noto-cjk"
+HOMEPAGE="https://fonts.google.com/noto"
 SRC_URI="
 	https://github.com/notofonts/noto-cjk/releases/download/Sans2.004/06_NotoSansCJKjp.zip -> ${P}-NotoSansCJKjp.zip
 	https://github.com/notofonts/noto-cjk/releases/download/Sans2.004/11_NotoSansMonoCJKjp.zip -> ${P}-NotoSansMonoCJKjp.zip
-	https://github.com/notofonts/noto-cjk/releases/download/Serif2.003/07_NotoSerifCJKjp.zip -> ${P}-NotoSerifCJKjp.zip"
+	https://github.com/notofonts/noto-cjk/releases/download/Serif2.003/07_NotoSerifCJKjp.zip -> ${P}-NotoSerifCJKjp.zip
+"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~loong ~mips ~ppc ~ppc64 ~riscv ~sparc ~x86"
-IUSE=""
-RESTRICT="binchecks mirror strip test"
+KEYWORDS="~amd64"
+RESTRICT="mirror strip test"
 
 BDEPEND="app-arch/unzip"
 
@@ -31,5 +31,5 @@ FONT_CONF=(
 src_unpack() {
 	default
 
-	mv OTF/Japanese/*.otf .
+	mv OTF/Japanese/*.otf . || die
 }

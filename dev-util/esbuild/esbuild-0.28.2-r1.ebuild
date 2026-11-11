@@ -1,4 +1,4 @@
-# Copyright 2025-2026 Gentoo Authors
+# Copyright 2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -12,11 +12,12 @@ SRC_URI="https://github.com/evanw/esbuild/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 LICENSE="BSD MIT"
 SLOT="${PV}"
 KEYWORDS="~amd64"
-
 RESTRICT="mirror test"
 
+QA_PRESTRIPPED="usr/bin/esbuild-${PV}"
+
 src_unpack() {
-	tar xf "${FILESDIR}/${P}-vendor.tar.xz" -C "${WORKDIR}" || die "Failed to unpack vendor tarball"
+	unpack "${FILESDIR}/${PF}-vendor.tar.xz"
 	go-module_src_unpack
 }
 
@@ -26,8 +27,4 @@ src_compile() {
 
 src_install() {
 	newbin esbuild esbuild-${PV}
-}
-
-src_test() {
-	ego test -mod=vendor ./cmd/esbuild
 }

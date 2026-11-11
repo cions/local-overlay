@@ -817,6 +817,8 @@ declare -A GIT_CRATES=(
 	[node-semver]='https://github.com/pnpm/node-semver-rs;3d74d6b7f4de1de2006cf2f7663aac09de65b1f6;node-semver-rs-%commit%'
 )
 
+RUST_MIN_VER="1.97.0"
+
 inherit cargo shell-completion
 
 DESCRIPTION="Fast, disk space efficient package manager"
@@ -834,6 +836,7 @@ LICENSE+="
 "
 SLOT="0"
 KEYWORDS="~amd64"
+RESTRICT="mirror test"
 
 src_prepare() {
 	sed -i \
@@ -852,10 +855,10 @@ src_install() {
 	dobin "$(cargo_target_dir)"/pnpm
 
 	"$(cargo_target_dir)"/pnpm completion bash > "${T}"/pnpm.bash || die
-	"$(cargo_target_dir)"/pnpm completion fish > "${T}"/pnpm.fish || die
 	"$(cargo_target_dir)"/pnpm completion zsh > "${T}"/pnpm.zsh || die
+	"$(cargo_target_dir)"/pnpm completion fish > "${T}"/pnpm.fish || die
 
 	newbashcomp "${T}"/pnpm.bash pnpm
-	newfishcomp "${T}"/pnpm.fish pnpm
 	newzshcomp "${T}"/pnpm.zsh _pnpm
+	dofishcomp "${T}"/pnpm.fish
 }

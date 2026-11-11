@@ -1,5 +1,3 @@
-diff --git a/rs_bindings_from_cc/ast_util.cc b/rs_bindings_from_cc/ast_util.cc
-index 4bd59d0f7..7ae1ec552 100644
 --- a/rs_bindings_from_cc/ast_util.cc
 +++ b/rs_bindings_from_cc/ast_util.cc
 @@ -580,14 +580,7 @@ RecordingDiagnosticConsumer RecordDiagnosticsAndMarkFailedInstantiations(
@@ -18,8 +16,6 @@ index 4bd59d0f7..7ae1ec552 100644
        defaulted_kind.isSpecialMember()) {
      auto special_member_kind = defaulted_kind.asSpecialMember();
      if (!function_decl->isDeleted() &&
-diff --git a/rs_bindings_from_cc/importer.cc b/rs_bindings_from_cc/importer.cc
-index c2fe7af1a..f1fd9cc39 100644
 --- a/rs_bindings_from_cc/importer.cc
 +++ b/rs_bindings_from_cc/importer.cc
 @@ -1573,9 +1573,7 @@ Importer::GetModuleCommentsInFile(clang::FileID file) const {
@@ -33,8 +29,6 @@ index c2fe7af1a..f1fd9cc39 100644
        clang::Lexer lexer(file, *buffer, sm, ctx_.getLangOpts());
        lexer.SetCommentRetentionState(true);
        clang::Token token;
-diff --git a/rs_bindings_from_cc/importers/function.cc b/rs_bindings_from_cc/importers/function.cc
-index 8b2f8b7b5..1880462dc 100644
 --- a/rs_bindings_from_cc/importers/function.cc
 +++ b/rs_bindings_from_cc/importers/function.cc
 @@ -397,7 +397,7 @@ std::optional<PropertyFieldInfo> GetPropertyFieldInfo(

@@ -364,16 +364,13 @@ NPM_PKGS=(
 )
 
 LLVM_COMPAT=( 23 )
-PYTHON_COMPAT=( python3_{11..14} )
-USE_RUBY="ruby32 ruby33 ruby34 ruby40"
+PYTHON_COMPAT=( python3_{11..15} )
+USE_RUBY="ruby33 ruby34 ruby40"
 RUST_MIN_VER="1.99.0"
 RUST_MAX_VER="${RUST_MIN_VER}"
 RUST_NEEDS_LLVM=1
 
 inherit cargo edo flag-o-matic llvm-r2 multiprocessing python-any-r1 ruby-single shell-completion toolchain-funcs
-
-DESCRIPTION="Incredibly fast JavaScript runtime, bundler, test runner, and package manager"
-HOMEPAGE="https://bun.com/"
 
 _bun_vendor_src_uri() {
 	local line parts name repo commit
@@ -399,6 +396,8 @@ _npm_pkg_src_uri() {
 	done
 }
 
+DESCRIPTION="Incredibly fast JavaScript runtime, bundler, test runner, and package manager"
+HOMEPAGE="https://bun.com/"
 SRC_URI="
 	https://github.com/oven-sh/bun/archive/refs/tags/bun-v${PV}.tar.gz -> ${P}.tar.gz
 	https://nodejs.org/dist/${BUN_NODEJS_VERSION}/node-${BUN_NODEJS_VERSION}-headers.tar.gz -> bun-node-${BUN_NODEJS_VERSION}-headers.tar.gz
@@ -416,8 +415,6 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE="+system-bootstrap"
 RESTRICT="mirror test"
-
-S="${WORKDIR}/bun-bun-v${PV}"
 
 RDEPEND="dev-libs/icu:="
 DEPEND="${RDEPEND}"
@@ -437,7 +434,10 @@ BDEPEND="
 	dev-util/gperf
 	virtual/pkgconfig
 	system-bootstrap? ( dev-lang/bun )
-	!system-bootstrap? ( app-arch/unzip )"
+	!system-bootstrap? ( app-arch/unzip )
+"
+
+S="${WORKDIR}/bun-bun-v${PV}"
 
 PATCHES=(
 	"${FILESDIR}"/bun-1.4.4-once-default.patch
@@ -445,9 +445,7 @@ PATCHES=(
 )
 
 pkg_setup() {
-	[[ ${MERGE_TYPE} == binary ]] && return
-
-	llvm-r1_pkg_setup
+	llvm-r2_pkg_setup
 	python-any-r1_pkg_setup
 	rust_pkg_setup
 }
@@ -499,7 +497,9 @@ src_unpack() {
 		"bun-node-${BUN_NODEJS_VERSION}-headers.tar.gz"
 
 	_bun_npm_unpack
+
 	ln -sf ../packages/bun-types "${S}/node_modules/bun-types" || die
+
 	mkdir -p "${S}/node_modules/.bin" || die
 	ln -sf ../esbuild/bin/esbuild "${S}/node_modules/.bin/esbuild" || die
 }
@@ -522,23 +522,23 @@ src_prepare() {
 }
 
 src_compile() {
-	local -x BUN_WEBKIT_PATH="${WORKDIR}/WebKit-${BUN_WEBKIT_COMMIT}"
 	local -x BUN_TOOLCHAIN_LLVM="$(get_llvm_prefix -b)"
 	local -x BUN_TOOLCHAIN_RUST="$(get_rust_prefix -b)"
 	local -x BUN_BUILD_PREFETCH_DIR="${WORKDIR}/bun-prefetch"
+	local -x BUN_WEBKIT_PATH="${WORKDIR}/WebKit-${BUN_WEBKIT_COMMIT}"
+	local -x GIT_SHA="${BUN_GIT_SHA}"
 	local -x CARGO_HOME="${ECARGO_HOME}"
 	local -x RUSTC_BOOTSTRAP=1
-	local -x GIT_SHA="${BUN_GIT_SHA}"
 
 	local bootstrap_bun="bun"
 	if ! use system-bootstrap; then
 		bootstrap_bun="${WORKDIR}/bun-linux-x64/bun"
 	fi
 
-	local lto=off
-	tc-is-lto && lto=on
+	local lto="off"
+	tc-is-lto && lto="on"
 
-	edo ${bootstrap_bun} scripts/build.ts --profile=release-local --canary=off --lto=${lto} -j$(makeopts_jobs) -l$(makeopts_loadavg)
+	edo ${bootstrap_bun} scripts/build.ts --profile="release-local" --canary="off" --lto="${lto}" -j$(makeopts_jobs) -l$(makeopts_loadavg)
 }
 
 src_install() {

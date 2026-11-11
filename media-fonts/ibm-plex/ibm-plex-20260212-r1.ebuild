@@ -1,24 +1,22 @@
-# Copyright 1999-2026 Gentoo Authors
+# Copyright 2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
+
+GIT_COMMIT="770f2077bb8cb12a3a20bcefc8be9dd2ed985908"
 
 inherit font
 
 DESCRIPTION="The package of IBM's typeface"
 HOMEPAGE="https://github.com/IBM/plex"
-COMMIT="770f2077bb8cb12a3a20bcefc8be9dd2ed985908"
-SRC_URI="https://github.com/IBM/plex/archive/${COMMIT}.zip -> ${P}.zip"
+SRC_URI="https://github.com/IBM/plex/archive/${GIT_COMMIT}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="OFL-1.1"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~loong ~mips ~ppc ~ppc64 ~riscv ~sparc ~x86"
-IUSE=""
-RESTRICT="binchecks mirror strip test"
+KEYWORDS="~amd64"
+RESTRICT="mirror strip test"
 
-BDEPEND="app-arch/unzip"
-
-S="${WORKDIR}/plex-${COMMIT}/packages"
+S="${WORKDIR}/plex-${GIT_COMMIT}/packages"
 
 FONT_SUFFIX="otf"
 FONT_S=(

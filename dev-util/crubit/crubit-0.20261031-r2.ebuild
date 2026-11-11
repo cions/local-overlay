@@ -1,13 +1,9 @@
-# Copyright 2008-2026 Gentoo Authors
+# Copyright 2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-LLVM_COMPAT=( 23 )
-PYTHON_COMPAT=( python3_{11..15} )
-RUST_MIN_VER="1.99.0"
-RUST_NEED_LLVM="1"
-
+CRUBIT_COMMIT="25d2c01bde904c3333bb2d48201e5cbb186a1c7f"
 CRATES="
 	aho-corasick@1.1.5
 	anstream@1.0.0
@@ -104,20 +100,25 @@ CRATES="
 	windows-sys@0.61.2
 	zmij@1.0.23"
 
-inherit cargo flag-o-matic edo llvm-r2 python-any-r1 rust
+LLVM_COMPAT=( 23 )
+PYTHON_COMPAT=( python3_{11..15} )
+RUST_MIN_VER="1.99.0"
+RUST_MAX_VER="${RUST_MIN_VER}"
+RUST_NEED_LLVM="1"
+
+inherit cargo edo flag-o-matic llvm-r2 python-any-r1 rust
 
 DESCRIPTION="A bidirectional bindings generator for C++ and Rust"
 HOMEPAGE="https://crubit.rs/"
-GIT_COMMIT="25d2c01bde904c3333bb2d48201e5cbb186a1c7f"
 SRC_URI="
-	https://github.com/google/crubit/archive/${GIT_COMMIT}.zip -> ${P}.zip
-	${CARGO_CRATE_URIS}"
+	https://github.com/google/crubit/archive/${CRUBIT_COMMIT}.tar.gz -> ${P}.tar.gz
+	${CARGO_CRATE_URIS}
+"
 
-LICENSE="BSD Apache-2.0 MIT Unicode-3.0"
+LICENSE="Apache-2.0 BSD MIT Unicode-3.0"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE=""
-RESTRICT="mirror"
+RESTRICT="mirror test"
 
 RDEPEND="
 	$(llvm_gen_dep '
@@ -125,9 +126,12 @@ RDEPEND="
 		llvm-core/llvm:${LLVM_SLOT}=
 	')
 	dev-cpp/abseil-cpp
-	>=dev-libs/protobuf-36.1"
-BDEPEND="${RDEPEND}
-	${PYTHON_DEPS}"
+	>=dev-libs/protobuf-36.1
+"
+DEPEND="${RDEPEND}"
+BDEPEND="${PYTHON_DEPS}"
+
+S="${WORKDIR}/${PN}-${CRUBIT_COMMIT}"
 
 PATCHES=(
 	"${FILESDIR}"/crubit-0.20261031-filter-absl-libs.patch
@@ -140,35 +144,34 @@ pkg_setup() {
 	rust_pkg_setup
 }
 
-src_unpack() {
-	cargo_src_unpack
-
-	mv ${PN}-${GIT_COMMIT}/* ${P}/ || die
-}
-
 src_compile() {
-	edo "${EPYTHON}" cargo/build/generate_proto_headers.py --protoc=$(which protoc) --out_dir="${WORKDIR}"/proto-headers
-
-	append-cxxflags "-DCRUBIT_LLVM_DEV_DATE=20261019"
-	append-ldflags "-L$(llvm-config --libdir)" "-Wl,-rpath,$(${RUSTC} --print sysroot)/lib"
-
 	local -x RUSTC_BOOTSTRAP=1
-	local -x ABSL_INCLUDE_PATH="${ESYSROOT}"/usr/include
-	local -x ABSL_LIB_STATIC_PATH="${ESYSROOT}"/usr/$(get_libdir)
+	local -x ABSL_INCLUDE_PATH="${ESYSROOT}/usr/include"
+	local -x ABSL_LIB_STATIC_PATH="${ESYSROOT}/usr/$(get_libdir)"
 	local -x CLANG_INCLUDE_PATH="$(llvm-config --includedir)"
 	local -x CLANG_LIB_STATIC_PATH="$(llvm-config --libdir)"
-	local -x PROTOBUF_INCLUDE_PATH="${ESYSROOT}"/usr/include,"${WORKDIR}"/proto-headers
-	local -x PROTOBUF_LIB_STATIC_PATH="${ESYSROOT}"/usr/$(get_libdir)
-	local -x PROTOC="$(which protoc)"
+	local -x PROTOBUF_INCLUDE_PATH="${ESYSROOT}/usr/include,${WORKDIR}/proto-headers"
+	local -x PROTOBUF_LIB_STATIC_PATH="${ESYSROOT}/usr/$(get_libdir)"
+	local -x PROTOC="$(type -P protoc)"
+
+	append-cxxflags "-DCRUBIT_LLVM_DEV_DATE=20261019"
+	append-ldflags "-L$(llvm-config --libdir)"
+	append-ldflags "-Wl,-rpath,$(${RUSTC} --print sysroot)/lib"
+
+	edo ${EPYTHON} cargo/build/generate_proto_headers.py \
+		--protoc="${PROTOC}" --out_dir="${WORKDIR}/proto-headers"
 
 	cargo_src_compile --package cc_bindings_from_rs --package rs_bindings_from_cc
 }
 
 src_install() {
-	into usr/$(get_libdir)/${PN}
-	dobin target/release/{cc_bindings_from_rs,rs_bindings_from_cc}
+	local libdir="usr/$(get_libdir)/${PN}"
 
-	insinto usr/$(get_libdir)/${PN}/lib/third_party/crubit
+	into "${libdir}"
+	dobin target/release/cc_bindings_from_rs
+	dobin target/release/rs_bindings_from_cc
+
+	insinto "${libdir}/lib/third_party/crubit"
 	doins BUILD.gn crubit.gni
 	doins -r support
 }

@@ -3,8 +3,6 @@
 
 EAPI=8
 
-LLVM_COMPAT=( 23 )
-
 CRATES="
 	Inflector@0.11.4
 	addr2line@0.24.2
@@ -1056,9 +1054,11 @@ CRATES="
 	zune-jpeg@0.4.13
 "
 
+LLVM_COMPAT=( 23 )
+
 inherit cargo llvm-r2 shell-completion toolchain-funcs
 
-DESCRIPTION="A modern runtime for JavaScript and TypeScript."
+DESCRIPTION="A modern runtime for JavaScript and TypeScript"
 HOMEPAGE="https://deno.com/"
 SRC_URI="
 	https://github.com/denoland/deno/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
@@ -1082,8 +1082,8 @@ BDEPEND="
 		llvm-core/clang:${LLVM_SLOT}=
 		llvm-core/llvm:${LLVM_SLOT}=
 	')
+	app-alternatives/ninja
 	dev-build/gn
-	dev-build/ninja
 	dev-util/bindgen
 "
 
@@ -1153,10 +1153,10 @@ src_install() {
 	dobin "$(cargo_target_dir)"/deno
 
 	"$(cargo_target_dir)"/deno completions bash > "${T}"/deno.bash || die
-	"$(cargo_target_dir)"/deno completions fish > "${T}"/deno.fish || die
 	"$(cargo_target_dir)"/deno completions zsh > "${T}"/deno.zsh || die
+	"$(cargo_target_dir)"/deno completions fish > "${T}"/deno.fish || die
 
 	newbashcomp "${T}"/deno.bash deno
-	newfishcomp "${T}"/deno.fish deno
 	newzshcomp "${T}"/deno.zsh _deno
+	dofishcomp "${T}"/deno.fish
 }

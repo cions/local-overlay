@@ -1,4 +1,4 @@
-# Copyright 1999-2026 Gentoo Authors
+# Copyright 2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -190,7 +190,10 @@ KEYWORDS="~amd64"
 IUSE="+system-bootstrap"
 RESTRICT="mirror test"
 
-RDEPEND="dev-libs/gmp:="
+RDEPEND="
+	dev-libs/gmp:=
+	dev-libs/libffi:=
+"
 DEPEND="${RDEPEND}"
 BDEPEND="
 	dev-lang/ghc
@@ -199,8 +202,10 @@ BDEPEND="
 
 S="${WORKDIR}/cabal-cabal-install-v${PV}"
 
+QA_CONFIGURE_OPTIONS="--with-compiler --with-cc"
+
 pkg_setup() {
-	CABAL="cabal"
+	: ${CABAL:=cabal}
 	if ! use system-bootstrap; then
 		CABAL="${WORKDIR}/cabal"
 	fi
@@ -209,20 +214,30 @@ pkg_setup() {
 
 src_unpack() {
 	unpack "cabal-install-v${PV}.tar.gz"
-	use system-bootstrap || unpack "cabal-install-${PV}-x86_64-linux-unknown.tar.xz"
+	use system-bootstrap || unpack "${P}-x86_64-linux-unknown.tar.xz"
 
 	mkdir -p "${WORKDIR}/vendor" || die
 	local f
 	for f in ${A}; do
 		[[ "${f}" == "cabal-install-v${PV}.tar.gz" ]] && continue
-		[[ "${f}" == "${P}"-*.tar.xz ]] && continue
+		[[ "${f}" == "${P}-x86_64-linux-unknown.tar.xz" ]] && continue
 		ln -s "${DISTDIR}/${f}" "${WORKDIR}/vendor/${f}" || die
 	done
+
+	cat <<-EOF >> "${T}/cabal.config"
+	repository local
+	  url: file+noindex://${WORKDIR}/vendor
+	EOF
+	export CABAL_CONFIG="${T}/cabal.config"
 }
 
 src_prepare() {
 	cp "${FILESDIR}/${PF}.freeze" cabal.release.project.freeze || die
 
+	default
+}
+
+src_configure() {
 	filter-lto
 
 	GHC_OPTIONS="${HCFLAGS}"
@@ -233,29 +248,20 @@ src_prepare() {
 	GHC_OPTIONS+=" -optl-Wl,-z,relro"
 	GHC_OPTIONS+=" -optl-Wl,-z,now"
 
-	cat <<-EOF > cabal.release.project.local || die
-	project-file: cabal.release.project
-	ignore-project: False
-	tests: False
-	executable-stripping: False
-	library-stripping: False
-	optimization: 2
-	jobs: $(makeopts_jobs)
+	local cabal_conf=(
+		--enable-optimization=2
+		--disable-executable-stripping
+		--disable-library-stripping
+		--disable-tests
+		--ghc-options="${GHC_OPTIONS}"
+		--jobs=$(makeopts_jobs)
+	)
 
-	program-options
-	  ghc-options: ${GHC_OPTIONS}
-
-	repository local
-	  url: file+noindex://${WORKDIR}/vendor
-
-	active-repositories: local
-	EOF
-
-	default
+	edo ${CABAL} v2-configure --project-file="cabal.release.project" "${cabal_conf[@]}"
 }
 
 src_compile() {
-	edo ${CABAL} --config-file=/dev/null v2-build --project-file="cabal.release.project" --builddir="${WORKDIR}/_build" cabal-install
+	edo ${CABAL} v2-build --project-file="cabal.release.project" --builddir="${WORKDIR}/_build" cabal-install
 }
 
 src_install() {
