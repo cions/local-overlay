@@ -1,4 +1,4 @@
-# Copyright 2009-2026 Gentoo Authors
+# Copyright 2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -12,7 +12,7 @@ SRC_URI="https://github.com/mullvad/mullvad-browser/releases/download/${PV}/mull
 LICENSE="MPL-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
-RESTRICT="mirror"
+RESTRICT="mirror test"
 
 RDEPEND="
 	app-accessibility/at-spi2-core:2
@@ -44,7 +44,8 @@ RDEPEND="
 	x11-libs/gdk-pixbuf:2
 	x11-libs/gtk+:3
 	x11-libs/libXext
-	x11-libs/pango"
+	x11-libs/pango
+"
 
 S="${WORKDIR}/mullvad-browser"
 
