@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CHROMIUM_HOME="$(cd -- "$(dirname -- "${BASH_SOURCE[0]:-$0}")" && pwd -P)"
+CHROMIUM_HOME="$(cd -- "$(dirname -- "$(realpath -- "${BASH_SOURCE[0]:-$0}")")" && pwd -P)"
 
 export PATH="${CHROMIUM_HOME}:${PATH}"
 

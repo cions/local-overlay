@@ -1,4 +1,4 @@
-# Copyright 2009-2026 Gentoo Authors
+# Copyright 2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -15,6 +15,12 @@ RUST_MIN_VER="1.91.0"
 RUST_NEEDS_LLVM="1"
 RUST_REQ_USE="rustfmt"
 
+CHROMIUM_LANGS="
+	af am ar bg bn ca cs da de el en-GB es es-419 et fa fi fil fr gu he hi hr
+	hu id it ja kn ko lt lv ml mr ms nb nl pl pt-BR pt-PT ro ru sk sl sr sv sw
+	ta te th tr uk ur vi zh-CN zh-TW
+"
+
 inherit desktop edo flag-o-matic llvm-r2 multiprocessing ninja-utils pax-utils python-any-r1 rust toolchain-funcs xdg-utils
 
 DESCRIPTION="the open-source browser behind the Google Chrome"
@@ -24,26 +30,10 @@ SRC_URI="https://github.com/chromium-linux-tarballs/chromium-tarballs/releases/d
 LICENSE="Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD BSD-2 Base64 Boost-1.0 CC-BY-3.0 CC-BY-4.0 Clear-BSD FFT2D FTL"
 LICENSE+=" IJG ISC LGPL-2 LGPL-2.1 MIT MPL-1.1 MPL-2.0 Ms-PL PSF-2 SGI-B-2.0 SSLeay SunSoft Unicode-3.0"
 LICENSE+=" Unicode-DFS-2015 Unlicense UoI-NCSA ZLIB libtiff openssl"
-
 SLOT="stable"
 KEYWORDS="~amd64"
-RESTRICT="mirror"
-
-CHROMIUM_LANGS="
-	af am ar bg bn ca cs da de el en-GB es es-419 et fa fi fil fr gu he hi hr
-	hu id it ja kn ko lt lv ml mr ms nb nl pl pt-BR pt-PT ro ru sk sl sr sv sw
-	ta te th tr uk ur vi zh-CN zh-TW
-"
 IUSE="cups +hangouts +proprietary-codecs +vaapi wayland +widevine"
-
-_chromium_set_l10n_IUSE() {
-	local lang
-	for lang in ${CHROMIUM_LANGS}; do
-		IUSE+=" +l10n_${lang}"
-	done
-}
-_chromium_set_l10n_IUSE
-unset -f _chromium_set_l10n_IUSE
+RESTRICT="mirror test"
 
 RDEPEND="
 	>=app-accessibility/at-spi2-core-2.46.0:2
@@ -91,8 +81,10 @@ RDEPEND="
 	x11-libs/pango:=
 	cups? ( >=net-print/cups-1.3.11:= )
 	vaapi? ( >=media-libs/libva-2.7:=[X,wayland?] )
-	wayland? ( dev-libs/wayland:= )"
-BDEPEND="${RDEPEND}
+	wayland? ( dev-libs/wayland:= )
+"
+DEPEND="${RDEPEND}"
+BDEPEND="
 	${PYTHON_DEPS}
 	$(python_gen_any_dep '
 		dev-python/clang[${PYTHON_USEDEP}]
@@ -121,7 +113,8 @@ BDEPEND="${RDEPEND}
 	>=sys-devel/bison-2.4.3
 	sys-devel/flex
 	virtual/pkgconfig
-	x11-misc/xdg-utils"
+	x11-misc/xdg-utils
+"
 
 PATCHES=(
 	"${FILESDIR}"/m157-compiler-builtins.patch
@@ -132,13 +125,22 @@ PATCHES=(
 	"${FILESDIR}"/m157-system-crubit.patch
 )
 
+_chromium_set_l10n_IUSE() {
+	local lang
+	for lang in ${CHROMIUM_LANGS}; do
+		IUSE+=" +l10n_${lang}"
+	done
+}
+_chromium_set_l10n_IUSE
+unset -f _chromium_set_l10n_IUSE
+
 python_check_deps() {
 	python_has_version "dev-python/clang[${PYTHON_USEDEP}]"
 	python_has_version "dev-python/setuptools[${PYTHON_USEDEP}]"
 }
 
 pkg_setup() {
-	llvm-r1_pkg_setup
+	llvm-r2_pkg_setup
 	python-any-r1_pkg_setup
 	rust_pkg_setup
 
@@ -245,6 +247,8 @@ src_install() {
 	doexe out/Release/chromedriver
 	doexe out/Release/chrome_crashpad_handler
 
+	doexe "${FILESDIR}/chromium-launcher.sh"
+
 	dosym "${CHROMIUM_HOME}/chromium-launcher.sh" "/usr/bin/chromium-browser${browser_suffix}"
 	dosym "${CHROMIUM_HOME}/chromium-launcher.sh" "/usr/bin/chromium${browser_suffix}"
 	dosym "${CHROMIUM_HOME}/chromedriver" "/usr/bin/chromedriver${browser_suffix}"
@@ -265,7 +269,6 @@ src_install() {
 	popd >/dev/null || die
 
 	insinto "${CHROMIUM_HOME}"
-	doins "${FILESDIR}/chromium-launcher.sh"
 	doins out/Release/*.bin
 	doins out/Release/*.pak
 	doins out/Release/*.so
