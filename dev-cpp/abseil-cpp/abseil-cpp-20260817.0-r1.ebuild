@@ -3,7 +3,7 @@
 
 EAPI=8
 
-MULTIBUILD_VARIANTS=( shared static )
+MULTIBUILD_VARIANTS=( static shared )
 PYTHON_COMPAT=( python3_{11..15} )
 
 inherit cmake-multilib dot-a edo flag-o-matic multibuild python-any-r1
@@ -29,6 +29,7 @@ src_prepare() {
 
 multilib_src_configure() {
 	local mycmakeargs=(
+		-DCMAKE_POSITION_INDEPENDENT_CODE="ON"
 		-DABSL_ENABLE_INSTALL="ON"
 		-DABSL_PROPAGATE_CXX_STD="ON"
 		-DABSL_BUILD_TESTING="OFF"
