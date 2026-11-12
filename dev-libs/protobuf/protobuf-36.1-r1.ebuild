@@ -4,7 +4,7 @@
 EAPI=8
 
 ABSEIL_MIN_VER="20250127.0"  # cmake/dependencies.cmake
-MULTIBUILD_VARIANTS=( shared static )
+MULTIBUILD_VARIANTS=( static shared )
 
 inherit cmake-multilib dot-a flag-o-matic multibuild multilib toolchain-funcs
 
@@ -30,6 +30,7 @@ DOCS=(
 
 multilib_src_configure() {
 	local mycmakeargs=(
+		-DCMAKE_POSITION_INDEPENDENT_CODE="ON"
 		-Dprotobuf_BUILD_LIBPROTOC="ON"
 		-Dprotobuf_BUILD_LIBUPB="ON"
 		-Dprotobuf_BUILD_PROTOBUF_BINARIES="ON"
@@ -40,7 +41,6 @@ multilib_src_configure() {
 		-Dprotobuf_DISABLE_RTTI="OFF"
 		-Dprotobuf_INSTALL="ON"
 		-Dprotobuf_WITH_ZLIB="ON"
-		-Dprotobuf_LOCAL_DEPENDENCIES_ONLY="ON"
 	)
 
 	if [[ ${MULTIBUILD_ID} == "shared-"* ]]; then
