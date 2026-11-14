@@ -146,5 +146,5 @@ src_compile() {
 }
 
 src_install() {
-	dobin "${WORKDIR}/_build/build/x86_64-linux/ghc-$(ghc-version)/${P}/x/cabal/opt/build/cabal/cabal"
+	dobin "$(cabal list-bin --project-file="cabal.release.project" cabal-install)"
 }

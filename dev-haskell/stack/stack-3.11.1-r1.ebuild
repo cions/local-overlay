@@ -255,7 +255,7 @@ src_configure() {
 }
 
 src_install() {
-	local stack="${WORKDIR}/_build/build/x86_64-linux/ghc-$(ghc-version)/${P}/opt/build/stack/stack"
+	local stack="$(cabal list-bin exe:stack)"
 
 	dobin "${stack}"
 

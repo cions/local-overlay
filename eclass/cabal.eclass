@@ -109,7 +109,7 @@ cabal_src_configure() {
 }
 
 cabal_src_compile() {
-	set -- ${CABAL} v2-build --builddir="${WORKDIR}/_build" "$@"
+	set -- ${CABAL} v2-build "$@"
 	echo "$@"
 	"$@" || die "${CABAL} v2-build failed"
 }
