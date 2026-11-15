@@ -18,7 +18,7 @@ CRATES="
 	ambient-id@0.0.11
 	android_system_properties@0.1.6
 	anes@0.1.6
-	annotate-snippets@0.12.17
+	annotate-snippets@0.12.18
 	ansi-str@0.9.0
 	ansitok@0.3.0
 	anstream@1.0.0
@@ -201,7 +201,7 @@ CRATES="
 	encoding_rs_io@0.1.8
 	equivalent@1.0.3
 	erased-serde@0.4.11
-	errno@0.3.14
+	errno@0.3.15
 	etcetera@0.11.0
 	event-listener@5.4.2
 	fallible-iterator@0.2.0
@@ -315,11 +315,11 @@ CRATES="
 	itertools@0.14.0
 	itertools@0.15.0
 	itoa@1.0.19
-	jiff-core@0.1.4
-	jiff-static@0.2.42
+	jiff-core@0.1.5
+	jiff-static@0.2.43
 	jiff-tzdb-platform@0.1.3
 	jiff-tzdb@0.1.9
-	jiff@0.2.42
+	jiff@0.2.43
 	jni-macros@0.22.4
 	jni-sys-macros@0.4.1
 	jni-sys@0.4.1
@@ -432,7 +432,7 @@ CRATES="
 	pep440_rs@0.7.3
 	pep508_rs@0.9.2
 	percent-encoding@2.3.2
-	pgp@0.21.0
+	pgp@0.21.1
 	phf@0.11.3
 	phf_codegen@0.11.3
 	phf_generator@0.11.3
@@ -522,7 +522,7 @@ CRATES="
 	rustls-pki-types@1.16.0
 	rustls-platform-verifier-android@0.2.0
 	rustls-platform-verifier@0.7.1
-	rustls-webpki@0.103.16
+	rustls-webpki@0.103.17
 	rustls@0.23.46
 	rustversion@1.0.23
 	ryu@1.0.23
@@ -628,7 +628,7 @@ CRATES="
 	synstructure@0.14.0
 	sys_traits@0.1.29
 	sys_traits_macros@0.1.0
-	sysinfo@0.40.1
+	sysinfo@0.40.3
 	tabled@0.22.0
 	tabled_derive@0.12.0
 	tap@1.0.1
@@ -804,9 +804,9 @@ CRATES="
 	zlib-rs@0.6.8
 	zmij@1.0.23
 	zopfli@0.8.4
-	zstd-safe@8.2.0
-	zstd-sys@2.1.2+zstd.1.5.7
-	zstd@0.14.3
+	zstd-safe@8.3.0
+	zstd-sys@2.1.3+zstd.1.5.7
+	zstd@0.14.4
 	zune-inflate@0.2.54
 "
 
@@ -836,7 +836,7 @@ SRC_URI="
 LICENSE="MIT"
 # Dependent crate licenses
 LICENSE+="
-	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD Boost-1.0
+	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD-2 BSD Boost-1.0
 	CDLA-Permissive-2.0 ISC MIT MPL-2.0 Unicode-3.0 ZLIB
 "
 SLOT="0"
