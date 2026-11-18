@@ -73,18 +73,18 @@ CRATES="
 	bs58@0.5.1
 	bstr@1.13.1
 	buffer-redux@1.1.0
-	bumpalo@3.20.3
+	bumpalo@3.20.4
 	bytecount@0.6.9
 	byteorder@1.5.0
 	bytes@1.12.1
 	camellia@0.1.0
 	cap-primitives@4.0.3
 	cargo-lock@11.1.0
-	cargo-util-schemas@0.14.3
+	cargo-util-schemas@0.15.0
 	cast5@0.11.1
 	cast@0.3.0
 	cbc@0.1.2
-	cc@1.11.1
+	cc@1.11.2
 	cexpr@0.6.0
 	cfb-mode@0.8.2
 	cfg-if@1.0.5
@@ -97,10 +97,10 @@ CRATES="
 	cipher@0.4.4
 	cipher@0.5.2
 	clang-sys@1.9.1
-	clap@4.6.7
+	clap@4.6.8
 	clap_builder@4.6.7
-	clap_derive@4.6.7
-	clap_lex@1.1.1
+	clap_derive@4.6.8
+	clap_lex@1.1.2
 	cmac@0.7.2
 	cmake@0.1.58
 	cmov@0.5.4
@@ -143,7 +143,7 @@ CRATES="
 	crypto-bigint@0.7.11
 	crypto-common@0.1.7
 	crypto-common@0.2.2
-	ctor@1.0.13
+	ctor@1.0.14
 	ctr@0.9.2
 	ctutils@0.4.8
 	curve25519-dalek-derive@0.1.1
@@ -315,11 +315,11 @@ CRATES="
 	itertools@0.14.0
 	itertools@0.15.0
 	itoa@1.0.19
-	jiff-core@0.1.5
-	jiff-static@0.2.43
+	jiff-core@0.1.8
+	jiff-static@0.2.46
 	jiff-tzdb-platform@0.1.3
-	jiff-tzdb@0.1.9
-	jiff@0.2.43
+	jiff-tzdb@0.1.10
+	jiff@0.2.46
 	jni-macros@0.22.4
 	jni-sys-macros@0.4.1
 	jni-sys@0.4.1
@@ -337,13 +337,14 @@ CRATES="
 	lazycell@1.3.0
 	libc@0.2.191
 	libloading@0.8.9
-	libloading@0.9.0
+	libloading@0.9.1
 	libm@0.2.16
 	libmimalloc-sys@0.1.49
 	libredox@0.1.25
 	libsqlite3-sys@0.37.0
 	libyaml-rs@0.3.0
 	line-index@0.1.2
+	link-section@0.19.4
 	linux-raw-sys@0.12.1
 	linux-raw-sys@0.4.15
 	litemap@0.8.3
@@ -366,7 +367,7 @@ CRATES="
 	mime@0.3.18
 	minimal-lexical@0.2.1
 	miniz_oxide@0.9.1
-	mio@1.2.4
+	mio@1.2.5
 	mockito@1.7.2
 	monch@0.6.0
 	multiversion_no_op@1.0.0
@@ -376,7 +377,8 @@ CRATES="
 	napi-sys@3.4.1
 	napi@3.16.2
 	nix@0.29.0
-	nix@0.31.3
+	nix@0.31.4
+	nix@0.32.0
 	nohash-hasher@0.2.0
 	nom@7.1.3
 	nom@8.0.0
@@ -479,7 +481,7 @@ CRATES="
 	r-efi@5.3.0
 	r-efi@6.0.0
 	radium@0.7.0
-	rand@0.10.3
+	rand@0.10.4
 	rand@0.8.8
 	rand@0.9.5
 	rand_chacha@0.3.1
@@ -495,7 +497,7 @@ CRATES="
 	redox_users@0.5.3
 	ref-cast-impl@1.0.27
 	ref-cast@1.0.27
-	reflink-copy@0.1.32
+	reflink-copy@0.1.33
 	regex-automata@0.4.18
 	regex-syntax@0.8.11
 	regex@1.13.1
@@ -628,7 +630,7 @@ CRATES="
 	synstructure@0.14.0
 	sys_traits@0.1.29
 	sys_traits_macros@0.1.0
-	sysinfo@0.40.3
+	sysinfo@0.40.4
 	tabled@0.22.0
 	tabled_derive@0.12.0
 	tap@1.0.1
@@ -710,7 +712,7 @@ CRATES="
 	utf8_iter@1.1.0
 	utf8parse@0.2.2
 	utf_types@1.0.0
-	uuid@1.29.2
+	uuid@1.29.3
 	valuable@0.1.1
 	vcpkg@0.2.15
 	version-ranges@0.1.3
@@ -782,7 +784,7 @@ CRATES="
 	x25519-dalek@2.0.1
 	x509-cert@0.2.5
 	xattr@1.7.0
-	xxhash-rust@0.8.19
+	xxhash-rust@0.8.21
 	yaml_serde@0.10.7
 	yamlpatch@1.32.0
 	yamlpath@1.32.0
@@ -800,7 +802,7 @@ CRATES="
 	zerotrie@0.2.5
 	zerovec-derive@0.11.7
 	zerovec@0.11.9
-	zip@9.5.1
+	zip@9.6.1
 	zlib-rs@0.6.8
 	zmij@1.0.23
 	zopfli@0.8.4
