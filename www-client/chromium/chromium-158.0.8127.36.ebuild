@@ -117,12 +117,10 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}"/m157-compiler-builtins.patch
-	"${FILESDIR}"/m157-compiler-warnings.patch
-	"${FILESDIR}"/m157-llvm-prefix.patch
-	"${FILESDIR}"/m157-rust-bindgen-libclang-path.patch
-	"${FILESDIR}"/m157-rust-sysroot.patch
-	"${FILESDIR}"/m157-system-crubit.patch
+	"${FILESDIR}"/m158-compiler-builtins.patch
+	"${FILESDIR}"/m158-compiler-warnings.patch
+	"${FILESDIR}"/m158-llvm-prefix.patch
+	"${FILESDIR}"/m158-rust-bindgen-libclang-path.patch
 )
 
 _chromium_set_l10n_IUSE() {

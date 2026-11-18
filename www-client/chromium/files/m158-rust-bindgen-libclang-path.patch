@@ -6,8 +6,8 @@
    rust_bindgen_root = "//third_party/rust-toolchain"
 +  rust_bindgen_libclang_path = ""
  
-   # If you're using a Rust toolchain as specified by rust_sysroot_absolute,
-   # set this to the output of `rustc -V`. Changing this string will cause all
+   # Directory under which to find Crubit tools and support libraries:
+   # * `bin/cc_bindings_from_rs` and `bin/rs_bindings_from_cc`
 --- a/build/rust/rust_bindgen_generator.gni
 +++ b/build/rust/rust_bindgen_generator.gni
 @@ -23,8 +23,10 @@ if (!use_chromium_rust_toolchain &&
