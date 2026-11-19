@@ -4,7 +4,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{11..15} )
-GN_COMMIT="d78676b2abbd0d124d1ad97f180ed156ead07a3a"
+GN_COMMIT="f126a26ef94d5c4620d0e7d06e2390bc621d846a"
 
 inherit edo ninja-utils python-any-r1 toolchain-funcs
 
@@ -26,6 +26,7 @@ S="${WORKDIR}"
 
 src_configure() {
 	tc-export AR CC CXX
+	export LD="$(tc-getCXX)"
 
 	edo ${EPYTHON} build/gen.py --allow-warnings --no-static-libstdc++ --no-strip
 }
