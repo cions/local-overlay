@@ -3,7 +3,7 @@
 
 EAPI=8
 
-GN_MIN_VER="0.2601"
+GN_MIN_VER="0.2637"
 GO_MIN_VER="1.25.0"
 NODE_MIN_VER="24.16.0-r1"
 ESBUILD_VER="0.28.2"
@@ -185,6 +185,7 @@ src_configure() {
 		"rust_bindgen_root=\"${BROOT}/usr\""
 		"rust_bindgen_libclang_path=\"$(get_llvm_prefix -b)/$(get_libdir)\""
 		"rust_crubit_root=\"${BROOT}/usr/$(get_libdir)/crubit\""
+		"added_rust_stdlib_libs=[\"addr2line\",\"adler2\",\"gimli\",\"miniz_oxide\"]"
 		"fatal_linker_warnings=false"
 		"is_official_build=true"
 		"symbol_level=0"
