@@ -4,7 +4,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{11..15} )
-GN_COMMIT="f126a26ef94d5c4620d0e7d06e2390bc621d846a"
+GN_COMMIT="f4c9d7267e593bd92a3f01a3c55fc260dac0552f"
 
 inherit edo ninja-utils python-any-r1 toolchain-funcs
 
