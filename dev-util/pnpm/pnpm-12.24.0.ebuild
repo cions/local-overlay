@@ -10,7 +10,7 @@ CRATES="
 	aes-gcm@0.10.3
 	aes-kw@0.2.1
 	aes@0.8.4
-	ahash@0.8.12
+	ahash@0.8.14
 	aho-corasick@1.1.5
 	alloca@0.4.0
 	allocator-api2@0.2.21
@@ -26,14 +26,14 @@ CRATES="
 	anstyle-query@1.1.5
 	anstyle-wincon@3.0.11
 	anstyle@1.0.14
-	anyhow@1.0.104
+	anyhow@1.0.105
 	argon2@0.5.3
 	arraydeque@0.5.1
 	arrayvec@0.7.8
 	assert-json-diff@2.0.2
 	assert_cmd@2.2.2
 	astral-reqwest-middleware@0.5.1
-	async-compression@0.4.52
+	async-compression@0.4.54
 	async-recursion@1.2.0
 	async-stream-impl@0.3.6
 	async-stream@0.3.6
@@ -97,8 +97,8 @@ CRATES="
 	cipher@0.4.4
 	cipher@0.5.2
 	clang-sys@1.9.1
-	clap@4.6.9
-	clap_builder@4.6.7
+	clap@4.6.10
+	clap_builder@4.6.10
 	clap_derive@4.6.9
 	clap_lex@1.1.2
 	cmac@0.7.2
@@ -109,14 +109,14 @@ CRATES="
 	colored@3.1.1
 	combine@4.6.9
 	command-extra@1.5.0
-	compression-codecs@0.4.48
+	compression-codecs@0.4.49
 	compression-core@0.4.34
 	console@0.16.6
 	const-oid@0.10.3
 	const-oid@0.9.6
 	const_format@0.2.37
 	const_format_proc_macros@0.2.37
-	constant_time_eq@0.6.1
+	constant_time_eq@0.6.2
 	convert_case@0.10.0
 	convert_case@0.12.0
 	core-foundation-sys@0.8.7
@@ -128,7 +128,7 @@ CRATES="
 	crc-catalog@2.5.0
 	crc-fast@1.10.0
 	crc24@0.1.6
-	crc32fast@1.5.5
+	crc32fast@1.5.6
 	crc@3.4.0
 	criterion-plot@0.8.2
 	criterion@0.8.2
@@ -240,12 +240,12 @@ CRATES="
 	ghash@0.5.1
 	gimli@0.34.0
 	glob@0.3.4
-	globset@0.4.21
+	globset@0.4.22
 	granit-parser@2.2.0
 	group@0.13.0
 	group@0.14.0
 	h2@0.3.27
-	h2@0.4.20
+	h2@0.4.21
 	half@2.7.1
 	hashbrown@0.12.3
 	hashbrown@0.14.5
@@ -277,7 +277,7 @@ CRATES="
 	hyper-timeout@0.4.1
 	hyper-util@0.1.21
 	hyper@0.14.32
-	hyper@1.12.0
+	hyper@1.13.0
 	iana-time-zone-haiku@0.1.2
 	iana-time-zone@0.1.65
 	icu_collator@2.4.0
@@ -317,15 +317,15 @@ CRATES="
 	itertools@0.15.0
 	itoa@1.0.19
 	jiff-core@0.1.8
-	jiff-core@1.0.1
+	jiff-core@1.0.2
 	jiff-static@0.2.46
-	jiff-static@1.0.2
+	jiff-static@1.0.3
 	jiff-tzdb-platform@0.1.3
 	jiff-tzdb-platform@1.0.0
 	jiff-tzdb@0.1.10
 	jiff-tzdb@1.0.0
 	jiff@0.2.46
-	jiff@1.0.2
+	jiff@1.0.3
 	jni-macros@0.22.4
 	jni-sys-macros@0.4.1
 	jni-sys@0.4.1
@@ -355,7 +355,7 @@ CRATES="
 	linux-raw-sys@0.12.1
 	linux-raw-sys@0.4.15
 	litemap@0.8.3
-	litrs@1.0.1
+	litrs@1.1.0
 	lock_api@0.4.14
 	log@0.4.35
 	lru-slab@0.1.3
@@ -378,11 +378,11 @@ CRATES="
 	mockito@1.7.2
 	monch@0.6.0
 	multiversion_no_op@1.0.0
-	napi-build@2.6.0
-	napi-derive-backend@7.0.1
-	napi-derive@3.7.1
+	napi-build@2.7.0
+	napi-derive-backend@8.0.0
+	napi-derive@3.7.2
 	napi-sys@3.4.1
-	napi@3.16.2
+	napi@3.16.3
 	nix@0.29.0
 	nix@0.31.4
 	nix@0.32.0
@@ -570,7 +570,7 @@ CRATES="
 	sha1@0.11.0
 	sha2-asm@0.6.4
 	sha2@0.10.9
-	sha2@0.11.1
+	sha2@0.11.2
 	sha3@0.10.9
 	sharded-slab@0.1.7
 	shell-words@1.1.1
@@ -582,17 +582,17 @@ CRATES="
 	signature@2.2.0
 	signature@3.0.0
 	signed_note@0.2.0
-	sigstore-bundle@0.16.0
-	sigstore-crypto@0.16.0
-	sigstore-fulcio@0.16.0
-	sigstore-merkle@0.16.0
-	sigstore-oidc@0.16.0
-	sigstore-rekor@0.16.0
-	sigstore-sign@0.16.0
-	sigstore-trust-root@0.16.0
-	sigstore-tsa@0.16.0
-	sigstore-tuf@0.16.0
-	sigstore-types@0.16.0
+	sigstore-bundle@0.17.0
+	sigstore-crypto@0.17.0
+	sigstore-fulcio@0.17.0
+	sigstore-merkle@0.17.0
+	sigstore-oidc@0.17.0
+	sigstore-rekor@0.17.0
+	sigstore-sign@0.17.0
+	sigstore-trust-root@0.17.0
+	sigstore-tsa@0.17.0
+	sigstore-tuf@0.17.0
+	sigstore-types@0.17.0
 	simd-adler32@0.3.10
 	simd_cesu8@1.2.0
 	simdutf8@0.1.5
@@ -625,7 +625,7 @@ CRATES="
 	strsim@0.11.1
 	strum@0.28.0
 	strum_macros@0.28.0
-	subfeature@1.32.0
+	subfeature@1.33.1
 	subtle@2.6.1
 	supports-color@2.1.0
 	supports-color@3.0.2
@@ -669,9 +669,9 @@ CRATES="
 	tokio-stream@0.1.19
 	tokio-util@0.7.20
 	tokio@1.54.1
-	toml@1.2.2+spec-1.1.0
+	toml@1.2.3+spec-1.1.0
 	toml_datetime@1.1.3+spec-1.1.0
-	toml_parser@1.1.6+spec-1.1.0
+	toml_parser@1.1.7+spec-1.1.0
 	toml_writer@1.2.0+spec-1.1.0
 	tonic-web@0.11.0
 	tonic@0.11.0
@@ -688,7 +688,7 @@ CRATES="
 	tracing-serde@0.2.0
 	tracing-subscriber@0.3.23
 	tracing@0.1.44
-	tree-sitter-iter@1.32.0
+	tree-sitter-iter@1.33.1
 	tree-sitter-language@0.1.9
 	tree-sitter-yaml@0.7.2
 	tree-sitter@0.27.2
@@ -794,15 +794,15 @@ CRATES="
 	xattr@1.7.0
 	xxhash-rust@0.8.21
 	yaml_serde@0.10.7
-	yamlpatch@1.32.0
-	yamlpath@1.32.0
+	yamlpatch@1.33.1
+	yamlpath@1.33.1
 	yansi@1.0.1
 	yoke-derive@0.8.4
 	yoke@0.8.4
 	zerocopy-derive@0.7.35
-	zerocopy-derive@0.8.64
+	zerocopy-derive@0.8.66
 	zerocopy@0.7.35
-	zerocopy@0.8.64
+	zerocopy@0.8.66
 	zerofrom-derive@0.1.8
 	zerofrom@0.1.8
 	zeroize@1.9.2
@@ -810,13 +810,13 @@ CRATES="
 	zerotrie@0.2.5
 	zerovec-derive@0.11.7
 	zerovec@0.11.9
-	zip@9.8.1
-	zlib-rs@0.6.8
+	zip@9.8.2
+	zlib-rs@0.6.9
 	zmij@1.0.23
 	zopfli@0.8.4
-	zstd-safe@8.3.0
-	zstd-sys@2.1.3+zstd.1.5.7
-	zstd@0.14.4
+	zstd-safe@8.4.0
+	zstd-sys@2.2.0+zstd.1.6.0
+	zstd@0.14.5
 	zune-inflate@0.2.54
 "
 
