@@ -102,8 +102,7 @@ CRATES="
 
 LLVM_COMPAT=( 23 )
 PYTHON_COMPAT=( python3_{11..15} )
-RUST_MIN_VER="1.99.0"
-RUST_MAX_VER="${RUST_MIN_VER}"
+RUST_MIN_VER="1.100.0"
 RUST_NEED_LLVM="1"
 
 inherit cargo edo flag-o-matic llvm-r2 python-any-r1 rust
